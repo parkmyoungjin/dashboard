@@ -1,11 +1,11 @@
-import { Box, Typography, Grid } from '@mui/material';
+import { Box, Typography, Grid, Tooltip } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 const TimelineBar = styled(Box)(({ theme }) => ({
   position: 'relative',
-  height: 32,
+  height: 28,
   borderRadius: theme.spacing(0.5),
-  marginBottom: theme.spacing(1),
+  marginBottom: theme.spacing(0.5),
 }));
 
 const ProjectBar = styled(Box)(({ theme }) => ({
@@ -17,7 +17,10 @@ const ProjectBar = styled(Box)(({ theme }) => ({
   alignItems: 'center',
   paddingLeft: theme.spacing(1),
   paddingRight: theme.spacing(1),
-  zIndex: 1,
+  cursor: 'pointer',
+  '&:hover': {
+    filter: 'brightness(1.1)',
+  },
 }));
 
 const MonthLabel = styled(Typography)(({ theme }) => ({
@@ -65,36 +68,39 @@ export default function TimelineSection() {
   const daysInMonth = new Date(currentDate.getFullYear(), currentMonth, 0).getDate();
   const currentDay = currentDate.getDate();
   
-  // 현재 날짜의 정확한 위치 계산 (월간 진행률)
   const monthProgress = (currentDay - 1) / daysInMonth;
   const currentPosition = ((currentMonth - 1) * 8.33) + (monthProgress * 8.33);
 
   const projects = [
     {
       name: 'KDI현장조사',
-      duration: { start: 1, end: 1 },
-      color: 'rgba(147, 197, 253, 0.9)'  // 파스텔 블루
+      duration: { start: 1, end: 2 },
+      color: 'rgba(147, 197, 253, 0.9)',  // 파스텔 블루
+      description: '현장 실사 및 기초 데이터 수집'
     },
     {
-      name: '1차 질의 및 답변',
+      name: '1차 질의/답변',
       duration: { start: 2, end: 4 },
-      color: 'rgba(134, 239, 172, 0.9)'  // 파스텔 그린
+      color: 'rgba(134, 239, 172, 0.9)',  // 파스텔 그린
+      description: '초기 질의응답 및 피드백 반영'
     },
     {
-      name: '로고 제작',
+      name: '로고/브랜딩',
       duration: { start: 3, end: 5 },
-      color: 'rgba(253, 224, 71, 0.9)'   // 파스텔 옐로우
+      color: 'rgba(253, 224, 71, 0.9)',   // 파스텔 옐로우
+      description: '브랜드 아이덴티티 개발'
     },
     {
       name: '설문조사',
-      duration: { start: 3, end: 6 },
-      color: 'rgba(251, 207, 232, 0.9)'  // 파스텔 핑크
+      duration: { start: 4, end: 6 },
+      color: 'rgba(251, 207, 232, 0.9)',  // 파스텔 핑크
+      description: '이해관계자 의견 수렴'
     }
   ];
 
-  // 프로젝트 겹침 처리를 위한 로직
+  // 프로젝트를 3줄로 최적화하여 배치
   const arrangeProjects = () => {
-    const rows = [];
+    const rows = [[], [], []];  // 3줄로 고정
     const sortedProjects = [...projects].sort((a, b) => {
       if (a.duration.start === b.duration.start) {
         return (b.duration.end - b.duration.start) - (a.duration.end - a.duration.start);
@@ -103,24 +109,23 @@ export default function TimelineSection() {
     });
     
     sortedProjects.forEach(project => {
-      let rowIndex = 0;
-      while (true) {
-        if (!rows[rowIndex]) {
-          rows[rowIndex] = [project];
-          break;
-        }
+      // 각 프로젝트를 배치할 최적의 행 찾기
+      let bestRow = 0;
+      let minOverlap = Infinity;
+      
+      for (let i = 0; i < 3; i++) {
+        const overlap = rows[i].filter(existingProject => 
+          !(project.duration.start > existingProject.duration.end || 
+            project.duration.end < existingProject.duration.start)
+        ).length;
         
-        const canAddToRow = rows[rowIndex].every(existingProject => {
-          return project.duration.start > existingProject.duration.end || 
-                 project.duration.end < existingProject.duration.start;
-        });
-        
-        if (canAddToRow) {
-          rows[rowIndex].push(project);
-          break;
+        if (overlap < minOverlap) {
+          minOverlap = overlap;
+          bestRow = i;
         }
-        rowIndex++;
       }
+      
+      rows[bestRow].push(project);
     });
     
     return rows;
@@ -133,7 +138,7 @@ export default function TimelineSection() {
       <Typography 
         variant="h6" 
         sx={{ 
-          mb: 3,
+          mb: 2,
           fontWeight: 600,
           fontSize: '1rem',
           color: 'text.primary',
@@ -142,27 +147,26 @@ export default function TimelineSection() {
         지역완결형 글로벌허브 메디컬센터 사업 추진 현황
       </Typography>
 
-      <Box sx={{ position: 'relative', mt: 2 }}>
-        {/* 월 표시 */}
+      <Box sx={{ position: 'relative' }}>
         <Grid container spacing={0} sx={{ mb: 1 }}>
           {months.map((month, index) => (
             <Grid item xs={1} key={index}>
-              <MonthLabel>
-                {month}
-              </MonthLabel>
+              <MonthLabel>{month}</MonthLabel>
             </Grid>
           ))}
         </Grid>
 
-        {/* 타임라인 컨테이너 */}
         <Box sx={{ position: 'relative' }}>
           <TimelineContainer>
-            {/* 프로젝트 바 */}
-            <Box sx={{ position: 'relative' }}>
-              {projectRows.map((row, rowIndex) => (
-                <Box key={rowIndex}>
-                  {row.map((project, index) => (
-                    <TimelineBar key={`${rowIndex}-${index}`}>
+            {projectRows.map((row, rowIndex) => (
+              <Box key={rowIndex}>
+                {row.map((project, index) => (
+                  <Tooltip 
+                    key={`${rowIndex}-${index}`}
+                    title={`${project.name}: ${project.description}`}
+                    arrow
+                  >
+                    <TimelineBar>
                       <ProjectBar
                         sx={{
                           left: `${(project.duration.start - 1) * 8.33}%`,
@@ -179,19 +183,19 @@ export default function TimelineSection() {
                             overflow: 'hidden',
                             textOverflow: 'ellipsis',
                             fontWeight: 600,
+                            fontSize: '0.7rem',
                           }}
                         >
                           {project.name}
                         </Typography>
                       </ProjectBar>
                     </TimelineBar>
-                  ))}
-                </Box>
-              ))}
-            </Box>
+                  </Tooltip>
+                ))}
+              </Box>
+            ))}
           </TimelineContainer>
           
-          {/* 현재 날짜 표시선 */}
           <CurrentDateLine left={currentPosition} />
         </Box>
       </Box>
