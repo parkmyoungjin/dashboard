@@ -63,7 +63,7 @@ export default function Dashboard() {
             fontSize: { xs: '1.2rem', sm: '1.4rem' }
           }}
         >
-          글로벌허브 메디컬센터 사업 진행 현황
+          신사업추진팀 Dashboard
         </Typography>
 
         <Grid container spacing={2}>
