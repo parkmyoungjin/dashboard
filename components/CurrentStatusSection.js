@@ -1,27 +1,39 @@
-import { Box, Typography, List, ListItem, ListItemText, LinearProgress } from '@mui/material';
+import { Box, Typography, List, ListItem, ListItemText, Chip, Stack } from '@mui/material';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 
 export default function CurrentStatusSection() {
   // 예시 데이터 - 실제 데이터로 교체 필요
   const statusItems = [
     {
       title: '기반 시설 구축',
-      progress: 75,
-      description: '주요 인프라 설치 완료, 보안 시스템 구축 중'
+      completedTasks: [
+        '네트워크 인프라 구축',
+        '보안 시스템 설치'
+      ],
+      inProgressTasks: [
+        '백업 시스템 구축'
+      ]
     },
     {
       title: '시스템 개발',
-      progress: 60,
-      description: '핵심 모듈 개발 완료, 통합 테스트 진행 중'
+      completedTasks: [
+        '코어 모듈 개발',
+        'API 구현'
+      ],
+      inProgressTasks: [
+        '통합 테스트'
+      ]
     },
     {
-      title: '사용자 교육',
-      progress: 40,
-      description: '1차 교육 완료, 2차 교육 준비 중'
-    },
-    {
-      title: '품질 관리',
-      progress: 80,
-      description: '정기 점검 및 모니터링 진행 중'
+      title: '사용자 지원',
+      completedTasks: [
+        '1차 사용자 교육',
+        '매뉴얼 작성'
+      ],
+      inProgressTasks: [
+        '2차 교육 준비'
+      ]
     }
   ];
 
@@ -30,30 +42,47 @@ export default function CurrentStatusSection() {
       <Typography variant="h6" gutterBottom>
         주요 사업 추진 현황
       </Typography>
-      <List>
+      <List sx={{ '& .MuiListItem-root': { py: 2 } }}>
         {statusItems.map((item, index) => (
-          <ListItem key={index} sx={{ flexDirection: 'column', alignItems: 'stretch', gap: 1 }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-              <Typography variant="subtitle1">{item.title}</Typography>
-              <Typography variant="body2" color="text.secondary">
-                {item.progress}%
-              </Typography>
-            </Box>
-            <LinearProgress
-              variant="determinate"
-              value={item.progress}
-              sx={{
-                height: 8,
-                borderRadius: 4,
-                backgroundColor: 'rgba(0, 0, 0, 0.1)',
-                '& .MuiLinearProgress-bar': {
-                  borderRadius: 4,
-                }
-              }}
-            />
-            <Typography variant="body2" color="text.secondary">
-              {item.description}
+          <ListItem 
+            key={index} 
+            sx={{ 
+              flexDirection: 'column', 
+              alignItems: 'flex-start',
+              backgroundColor: 'background.paper',
+              borderRadius: 1,
+              mb: 1
+            }}
+          >
+            <Typography variant="subtitle1" sx={{ mb: 1, fontWeight: 'bold' }}>
+              {item.title}
             </Typography>
+            <Stack spacing={1} width="100%">
+              <Box>
+                <Stack direction="row" spacing={1} flexWrap="wrap" gap={1}>
+                  {item.completedTasks.map((task, i) => (
+                    <Chip
+                      key={i}
+                      icon={<CheckCircleIcon />}
+                      label={task}
+                      color="success"
+                      size="small"
+                      variant="outlined"
+                    />
+                  ))}
+                  {item.inProgressTasks.map((task, i) => (
+                    <Chip
+                      key={i}
+                      icon={<PlayCircleIcon />}
+                      label={task}
+                      color="primary"
+                      size="small"
+                      variant="outlined"
+                    />
+                  ))}
+                </Stack>
+              </Box>
+            </Stack>
           </ListItem>
         ))}
       </List>

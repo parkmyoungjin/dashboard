@@ -1,27 +1,36 @@
-import { Box, Typography, Card, CardContent, Grid } from '@mui/material';
+import { Box, Typography, List, ListItem, Stack, Chip } from '@mui/material';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import FlagIcon from '@mui/icons-material/Flag';
 
 export default function FuturePlanSection() {
   // 예시 데이터 - 실제 데이터로 교체 필요
   const plans = [
     {
-      date: '2024년 1분기',
+      quarter: '2024년 1분기',
       title: '시스템 고도화',
-      description: '성능 개선 및 신규 기능 추가'
+      tasks: [
+        '성능 최적화',
+        '신규 기능 개발',
+        '보안 강화'
+      ]
     },
     {
-      date: '2024년 2분기',
+      quarter: '2024년 2분기',
       title: '확장 계획',
-      description: '추가 모듈 개발 및 통합'
+      tasks: [
+        '신규 모듈 개발',
+        '기존 시스템 통합',
+        '테스트 자동화'
+      ]
     },
     {
-      date: '2024년 3분기',
+      quarter: '2024년 3분기',
       title: '안정화',
-      description: '시스템 안정화 및 성능 최적화'
-    },
-    {
-      date: '2024년 4분기',
-      title: '평가 및 개선',
-      description: '운영 결과 평가 및 개선사항 도출'
+      tasks: [
+        '시스템 모니터링 강화',
+        '장애 대응 체계 구축',
+        '백업 시스템 점검'
+      ]
     }
   ];
 
@@ -30,40 +39,44 @@ export default function FuturePlanSection() {
       <Typography variant="h6" gutterBottom>
         향후 추진 계획
       </Typography>
-      <Grid container spacing={2}>
+      <List sx={{ '& .MuiListItem-root': { py: 2 } }}>
         {plans.map((plan, index) => (
-          <Grid item xs={12} key={index}>
-            <Card 
-              sx={{ 
-                position: 'relative',
-                '&::before': {
-                  content: '""',
-                  position: 'absolute',
-                  left: 0,
-                  top: 0,
-                  bottom: 0,
-                  width: 4,
-                  backgroundColor: 'primary.main',
-                  borderTopLeftRadius: 4,
-                  borderBottomLeftRadius: 4
-                }
-              }}
-            >
-              <CardContent>
-                <Typography variant="subtitle2" color="primary" gutterBottom>
-                  {plan.date}
-                </Typography>
-                <Typography variant="subtitle1" gutterBottom>
-                  {plan.title}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {plan.description}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
+          <ListItem 
+            key={index}
+            sx={{ 
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+              backgroundColor: 'background.paper',
+              borderRadius: 1,
+              mb: 1
+            }}
+          >
+            <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 1 }}>
+              <Chip
+                icon={<CalendarTodayIcon />}
+                label={plan.quarter}
+                color="primary"
+                size="small"
+              />
+              <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+                {plan.title}
+              </Typography>
+            </Stack>
+            <Stack direction="row" spacing={1} flexWrap="wrap" gap={1}>
+              {plan.tasks.map((task, i) => (
+                <Chip
+                  key={i}
+                  icon={<FlagIcon />}
+                  label={task}
+                  color="info"
+                  size="small"
+                  variant="outlined"
+                />
+              ))}
+            </Stack>
+          </ListItem>
         ))}
-      </Grid>
+      </List>
     </Box>
   );
 } 
