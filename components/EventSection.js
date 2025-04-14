@@ -5,6 +5,7 @@ export default function EventSection() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -40,6 +41,16 @@ export default function EventSection() {
     fetchEvents();
   }, []);
 
+  useEffect(() => {
+    if (!events || events.length <= 3) return;
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 3) >= events.length ? 0 : prevIndex + 3);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [events]);
+
+  const displayEvents = events.slice(currentIndex, currentIndex + 3);
+
   if (loading) {
     return (
       <Box sx={{ p: 2, textAlign: 'center' }}>
@@ -70,33 +81,52 @@ export default function EventSection() {
         주요 이벤트
       </Typography>
       <Grid container spacing={2}>
-        {events.map((event, index) => (
-          <Grid item xs={12} sm={6} md={3} key={index}>
-            <Card 
-              sx={{ 
-                height: '100%',
-                transition: 'transform 0.2s',
-                '&:hover': {
-                  transform: 'translateY(-4px)',
-                  boxShadow: 3
-                }
-              }}
-            >
+        {displayEvents.map((event, index) => (
+          <Grid item xs={4} key={index}>
+            <Card sx={{ height: '100%', bgcolor: 'grey.50' }}>
               <CardContent>
-                <Typography variant="subtitle2" color="primary" gutterBottom>
-                  {event.date}
-                </Typography>
-                <Typography variant="subtitle1" gutterBottom>
+                <Typography variant="subtitle1" sx={{
+                  mb: 1,
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                }}>
                   {event.title}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="body2" color="text.secondary" sx={{
+                  mb: 1,
+                  overflow: 'hidden',
+                  display: '-webkit-box',
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: 'vertical'
+                }}>
                   {event.description}
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                  {event.date}
                 </Typography>
               </CardContent>
             </Card>
           </Grid>
         ))}
       </Grid>
+      {events.length > 3 && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2, gap: 1 }}>
+          {Array.from({ length: Math.ceil(events.length / 3) }).map((_, idx) => (
+            <Box
+              key={idx}
+              onClick={() => setCurrentIndex(idx * 3)}
+              sx={{
+                width: 8,
+                height: 8,
+                borderRadius: '50%',
+                bgcolor: Math.floor(currentIndex / 3) === idx ? 'primary.main' : 'grey.300',
+                cursor: 'pointer'
+              }}
+            />
+          ))}
+        </Box>
+      )}
     </Box>
   );
 } 
