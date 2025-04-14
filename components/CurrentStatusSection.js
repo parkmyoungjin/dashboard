@@ -1,5 +1,6 @@
 import { Box, Typography, LinearProgress } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import ApartmentIcon from '@mui/icons-material/Apartment';
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 16,
@@ -26,7 +27,7 @@ export default function CurrentStatusSection() {
 
   return (
     <Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', mb: 1 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
         <Typography 
           variant="h6" 
           sx={{ 
@@ -37,15 +38,26 @@ export default function CurrentStatusSection() {
         >
           전체 사업 진행률
         </Typography>
-        <Typography 
-          variant="body2" 
-          sx={{ 
-            fontWeight: 600,
-            color: 'primary.main',
-          }}
-        >
-          {progressPercentage}%
-        </Typography>
+        <Box sx={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          gap: 1,
+          bgcolor: 'primary.light',
+          px: 2,
+          py: 0.5,
+          borderRadius: 2
+        }}>
+          <ApartmentIcon sx={{ color: 'primary.main', fontSize: '1.2rem' }} />
+          <Typography 
+            variant="body2" 
+            sx={{ 
+              fontWeight: 600,
+              color: 'primary.main',
+            }}
+          >
+            {progressPercentage}%
+          </Typography>
+        </Box>
       </Box>
       
       <Box sx={{ width: '100%', position: 'relative' }}>
@@ -53,20 +65,6 @@ export default function CurrentStatusSection() {
           variant="determinate" 
           value={progressPercentage} 
         />
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            mt: 0.5,
-          }}
-        >
-          <Typography variant="caption" color="text.secondary">
-            2023년 시작
-          </Typography>
-          <Typography variant="caption" color="text.secondary">
-            2036년 완료
-          </Typography>
-        </Box>
       </Box>
     </Box>
   );
