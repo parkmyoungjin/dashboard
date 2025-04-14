@@ -3,9 +3,9 @@ import { styled } from '@mui/material/styles';
 
 const TimelineBar = styled(Box)(({ theme }) => ({
   position: 'relative',
-  height: 28,
+  height: 24,
   borderRadius: theme.spacing(0.5),
-  marginBottom: theme.spacing(0.5),
+  marginBottom: theme.spacing(0.25),
 }));
 
 const ProjectBar = styled(Box)(({ theme }) => ({
@@ -24,14 +24,16 @@ const ProjectBar = styled(Box)(({ theme }) => ({
 }));
 
 const MonthLabel = styled(Typography)(({ theme }) => ({
-  fontSize: '0.75rem',
+  fontSize: '0.7rem',
   color: theme.palette.text.secondary,
   textAlign: 'center',
   position: 'relative',
+  paddingBottom: theme.spacing(0.5),
 }));
 
 const TimelineContainer = styled(Box)(({ theme }) => ({
   position: 'relative',
+  marginBottom: theme.spacing(1),
   '&::after': {
     content: '""',
     position: 'absolute',
@@ -79,53 +81,36 @@ export default function TimelineSection() {
       description: '현장 실사 및 기초 데이터 수집'
     },
     {
-      name: '1차 질의/답변',
+      name: '1차 질의답변',
       duration: { start: 2, end: 4 },
       color: 'rgba(134, 239, 172, 0.9)',  // 파스텔 그린
-      description: '초기 질의응답 및 피드백 반영'
+      description: '질의응답 및 피드백'
     },
     {
-      name: '로고/브랜딩',
+      name: '로고/브랜드',
       duration: { start: 3, end: 5 },
       color: 'rgba(253, 224, 71, 0.9)',   // 파스텔 옐로우
-      description: '브랜드 아이덴티티 개발'
+      description: '브랜드 개발'
     },
     {
       name: '설문조사',
       duration: { start: 4, end: 6 },
       color: 'rgba(251, 207, 232, 0.9)',  // 파스텔 핑크
-      description: '이해관계자 의견 수렴'
+      description: '의견 수렴'
     }
   ];
 
-  // 프로젝트를 3줄로 최적화하여 배치
+  // 프로젝트를 3줄로 강제 배치
   const arrangeProjects = () => {
-    const rows = [[], [], []];  // 3줄로 고정
-    const sortedProjects = [...projects].sort((a, b) => {
-      if (a.duration.start === b.duration.start) {
-        return (b.duration.end - b.duration.start) - (a.duration.end - a.duration.start);
-      }
-      return a.duration.start - b.duration.start;
-    });
+    const rows = [[], [], []];
+    let currentRow = 0;
+
+    // 시작 시점으로 정렬
+    const sortedProjects = [...projects].sort((a, b) => a.duration.start - b.duration.start);
     
     sortedProjects.forEach(project => {
-      // 각 프로젝트를 배치할 최적의 행 찾기
-      let bestRow = 0;
-      let minOverlap = Infinity;
-      
-      for (let i = 0; i < 3; i++) {
-        const overlap = rows[i].filter(existingProject => 
-          !(project.duration.start > existingProject.duration.end || 
-            project.duration.end < existingProject.duration.start)
-        ).length;
-        
-        if (overlap < minOverlap) {
-          minOverlap = overlap;
-          bestRow = i;
-        }
-      }
-      
-      rows[bestRow].push(project);
+      rows[currentRow].push(project);
+      currentRow = (currentRow + 1) % 3; // 0, 1, 2 순환
     });
     
     return rows;
@@ -138,9 +123,9 @@ export default function TimelineSection() {
       <Typography 
         variant="h6" 
         sx={{ 
-          mb: 2,
+          mb: 1,
           fontWeight: 600,
-          fontSize: '1rem',
+          fontSize: '0.9rem',
           color: 'text.primary',
         }}
       >
@@ -148,7 +133,7 @@ export default function TimelineSection() {
       </Typography>
 
       <Box sx={{ position: 'relative' }}>
-        <Grid container spacing={0} sx={{ mb: 1 }}>
+        <Grid container spacing={0}>
           {months.map((month, index) => (
             <Grid item xs={1} key={index}>
               <MonthLabel>{month}</MonthLabel>
@@ -156,48 +141,46 @@ export default function TimelineSection() {
           ))}
         </Grid>
 
-        <Box sx={{ position: 'relative' }}>
-          <TimelineContainer>
-            {projectRows.map((row, rowIndex) => (
-              <Box key={rowIndex}>
-                {row.map((project, index) => (
-                  <Tooltip 
-                    key={`${rowIndex}-${index}`}
-                    title={`${project.name}: ${project.description}`}
-                    arrow
-                  >
-                    <TimelineBar>
-                      <ProjectBar
-                        sx={{
-                          left: `${(project.duration.start - 1) * 8.33}%`,
-                          width: `${(project.duration.end - project.duration.start + 1) * 8.33}%`,
-                          background: project.color,
-                          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+        <TimelineContainer>
+          {projectRows.map((row, rowIndex) => (
+            <Box key={rowIndex}>
+              {row.map((project, index) => (
+                <Tooltip 
+                  key={`${rowIndex}-${index}`}
+                  title={`${project.name}: ${project.description}`}
+                  arrow
+                >
+                  <TimelineBar>
+                    <ProjectBar
+                      sx={{
+                        left: `${(project.duration.start - 1) * 8.33}%`,
+                        width: `${(project.duration.end - project.duration.start + 1) * 8.33}%`,
+                        background: project.color,
+                        boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
+                      }}
+                    >
+                      <Typography 
+                        variant="caption" 
+                        sx={{ 
+                          color: 'rgba(0, 0, 0, 0.7)',
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          fontWeight: 600,
+                          fontSize: '0.65rem',
                         }}
                       >
-                        <Typography 
-                          variant="caption" 
-                          sx={{ 
-                            color: 'rgba(0, 0, 0, 0.7)',
-                            whiteSpace: 'nowrap',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            fontWeight: 600,
-                            fontSize: '0.7rem',
-                          }}
-                        >
-                          {project.name}
-                        </Typography>
-                      </ProjectBar>
-                    </TimelineBar>
-                  </Tooltip>
-                ))}
-              </Box>
-            ))}
-          </TimelineContainer>
-          
-          <CurrentDateLine left={currentPosition} />
-        </Box>
+                        {project.name}
+                      </Typography>
+                    </ProjectBar>
+                  </TimelineBar>
+                </Tooltip>
+              ))}
+            </Box>
+          ))}
+        </TimelineContainer>
+        
+        <CurrentDateLine left={currentPosition} />
       </Box>
     </Box>
   );
