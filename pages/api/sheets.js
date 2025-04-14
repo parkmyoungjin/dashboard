@@ -34,4 +34,14 @@ export default async function handler(req, res) {
       details: process.env.NODE_ENV === 'development' ? error.stack : undefined
     });
   }
+}
+
+export async function getNews() {
+  try {
+    const news = await getNewsData();
+    return news;
+  } catch (error) {
+    console.error('Error in getNews:', error);
+    throw error;
+  }
 } 

@@ -1,4 +1,4 @@
-import { Box, Typography, Paper, Fade } from '@mui/material';
+import { Box, Typography, Paper, Fade, Chip } from '@mui/material';
 import { useEffect, useState } from 'react';
 
 export default function ProgressSection() {
@@ -116,20 +116,18 @@ export default function ProgressSection() {
             >
               {currentProject.name}
             </Typography>
-            <Typography 
-              variant="body2" 
+            <Chip 
+              label="진행중" 
+              size="small" 
               sx={{ 
-                color: 'success.main',
-                bgcolor: 'success.light',
-                px: 1.5,
-                py: 0.5,
-                borderRadius: 1,
-                fontSize: '0.75rem',
-                fontWeight: 500
-              }}
-            >
-              {currentProject.status}
-            </Typography>
+                bgcolor: 'success.main',
+                color: '#ffffff',
+                fontWeight: 'bold',
+                '& .MuiChip-label': {
+                  color: '#ffffff'
+                }
+              }} 
+            />
           </Box>
 
           <Typography 

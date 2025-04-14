@@ -68,41 +68,37 @@ export default function EventSection() {
   }
 
   return (
-    <Box sx={{ bgcolor: '#F3F6F9', p: 3, borderRadius: 2, boxShadow: 1 }}>
-      <Typography 
-        variant="h6" 
-        sx={{ 
-          mb: 2,
-          fontWeight: 600,
-          fontSize: '0.9rem',
-          color: 'text.primary',
-        }}
-      >
+    <Box sx={{ bgcolor: '#1B2028', p: 3, borderRadius: 2, boxShadow: 1 }}>
+      <Typography variant="h5" fontWeight="bold" mb={3} sx={{ color: '#fff' }}>
         주요 이벤트
       </Typography>
       <Grid container spacing={2}>
         {displayEvents.map((event, index) => (
           <Grid item xs={4} key={index}>
-            <Card sx={{ height: '100%', bgcolor: 'white' }}>
+            <Card sx={{ height: '100%', bgcolor: '#232B38' }}>
               <CardContent>
                 <Typography variant="subtitle1" sx={{
                   mb: 1,
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+                  whiteSpace: 'nowrap',
+                  color: '#fff'
                 }}>
                   {event.title}
                 </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{
+                <Typography variant="body2" sx={{
                   mb: 1,
                   overflow: 'hidden',
                   display: '-webkit-box',
                   WebkitLineClamp: 2,
-                  WebkitBoxOrient: 'vertical'
+                  WebkitBoxOrient: 'vertical',
+                  color: '#a0aec0'
                 }}>
                   {event.description}
                 </Typography>
-                <Typography variant="caption" color="text.secondary">
+                <Typography variant="caption" sx={{ 
+                  color: '#a0aec0'
+                }}>
                   {event.date}
                 </Typography>
               </CardContent>

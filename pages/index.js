@@ -5,6 +5,8 @@ import TimelineSection from '../components/TimelineSection';
 import CurrentStatusSection from '../components/CurrentStatusSection';
 import FuturePlanSection from '../components/FuturePlanSection';
 import EventSection from '../components/EventSection';
+import NewsSection from '../components/NewsSection';
+import { useState, useEffect } from 'react';
 
 const DashboardContainer = styled(Container)(({ theme }) => ({
   marginTop: theme.spacing(4),
@@ -52,6 +54,22 @@ const PageTitle = styled(Typography)(({ theme }) => ({
 }));
 
 export default function Dashboard() {
+  const [progress, setProgress] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('/api/sheets');
+        const data = await response.json();
+        setProgress(data.progress || []);
+      } catch (error) {
+        console.error('Error fetching progress data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <Box sx={{ 
       minHeight: '100vh',
@@ -71,32 +89,20 @@ export default function Dashboard() {
           신사업추진팀 Dashboard
         </Typography>
 
-        <Grid container spacing={3}>
+        <Grid container spacing={4}>
           <Grid item xs={12} container spacing={3}>
             <Grid item xs={12} md={3}>
-              <Paper 
-                sx={{ 
-                  p: 3,
-                  height: '100%',
-                  minHeight: { xs: 'auto', sm: '200px' },
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center'
-                }}
-              >
-                <CurrentStatusSection />
-              </Paper>
+              <CurrentStatusSection />
             </Grid>
-            <Grid item xs={12} md={9}>
-              <Paper 
-                sx={{ 
-                  p: 3,
-                  height: '100%',
-                  minHeight: { xs: 'auto', sm: '200px' }
-                }}
-              >
-                <ProgressSection />
-              </Paper>
+            <Grid item xs={12} md={6}>
+              <ProgressSection />
+            </Grid>
+            <Grid item xs={12} md={3}>
+              <NewsSection news={[
+                { title: "첫 번째 이슈 제목입니다.", date: "2024-04-08" },
+                { title: "두 번째 이슈 제목입니다.", date: "2024-04-08" },
+                { title: "세 번째 이슈 제목입니다.", date: "2024-04-08" }
+              ]} />
             </Grid>
           </Grid>
 
