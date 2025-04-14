@@ -1,5 +1,6 @@
 import { Box, Typography, Grid, Tooltip } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { useState, useEffect } from 'react';
 
 const TimelineBar = styled(Box)(({ theme }) => ({
   position: 'relative',
@@ -64,6 +65,53 @@ const CurrentDateLine = styled(Box)(({ theme, left }) => ({
 }));
 
 export default function TimelineSection() {
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchTimelineData = async () => {
+      try {
+        const response = await fetch('/api/sheets?sheet=TimelineSection');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        
+        if (!Array.isArray(data) || data.length <= 1) {
+          throw new Error('데이터 형식이 올바르지 않습니다.');
+        }
+
+        // 헤더를 제외한 데이터 행을 처리
+        const formattedProjects = data.slice(1).map(row => ({
+          name: row[0] || '',
+          description: row[1] || '',
+          duration: { 
+            start: parseInt(row[2]) || 1, 
+            end: parseInt(row[3]) || 12 
+          },
+          color: getRandomPastelColor(),
+        }));
+        
+        setProjects(formattedProjects);
+        setError(null);
+      } catch (error) {
+        console.error('Error fetching timeline data:', error);
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTimelineData();
+  }, []);
+
+  // 파스텔 색상 생성 함수
+  const getRandomPastelColor = () => {
+    const hue = Math.floor(Math.random() * 360);
+    return `hsla(${hue}, 70%, 80%, 0.9)`;
+  };
+
   const months = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
   const currentMonth = new Date().getMonth() + 1;
   const currentDate = new Date();
@@ -72,33 +120,6 @@ export default function TimelineSection() {
   
   const monthProgress = (currentDay - 1) / daysInMonth;
   const currentPosition = ((currentMonth - 1) * 8.33) + (monthProgress * 8.33);
-
-  const projects = [
-    {
-      name: 'KDI현장조사',
-      duration: { start: 1, end: 2 },
-      color: 'rgba(147, 197, 253, 0.9)',  // 파스텔 블루
-      description: '현장 실사 및 기초 데이터 수집'
-    },
-    {
-      name: '1차 질의답변',
-      duration: { start: 2, end: 4 },
-      color: 'rgba(134, 239, 172, 0.9)',  // 파스텔 그린
-      description: '질의응답 및 피드백'
-    },
-    {
-      name: '로고/브랜드',
-      duration: { start: 3, end: 5 },
-      color: 'rgba(253, 224, 71, 0.9)',   // 파스텔 옐로우
-      description: '브랜드 개발'
-    },
-    {
-      name: '설문조사',
-      duration: { start: 4, end: 6 },
-      color: 'rgba(251, 207, 232, 0.9)',  // 파스텔 핑크
-      description: '의견 수렴'
-    }
-  ];
 
   // 프로젝트를 3줄로 강제 배치
   const arrangeProjects = () => {
@@ -110,11 +131,27 @@ export default function TimelineSection() {
     
     sortedProjects.forEach(project => {
       rows[currentRow].push(project);
-      currentRow = (currentRow + 1) % 3; // 0, 1, 2 순환
+      currentRow = (currentRow + 1) % 3;
     });
     
     return rows;
   };
+
+  if (loading) {
+    return (
+      <Box sx={{ p: 2, textAlign: 'center' }}>
+        <Typography>데이터를 불러오는 중입니다...</Typography>
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box sx={{ p: 2, textAlign: 'center', color: 'error.main' }}>
+        <Typography>데이터를 불러오는데 실패했습니다: {error}</Typography>
+      </Box>
+    );
+  }
 
   const projectRows = arrangeProjects();
 

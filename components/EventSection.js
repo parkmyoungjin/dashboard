@@ -1,33 +1,72 @@
 import { Box, Typography, Card, CardContent, Grid } from '@mui/material';
+import { useState, useEffect } from 'react';
 
 export default function EventSection() {
-  // 예시 데이터 - 실제 데이터로 교체 필요
-  const events = [
-    {
-      date: '2024.03.15',
-      title: '중간 평가회',
-      description: '1분기 사업 진행상황 점검 및 평가'
-    },
-    {
-      date: '2024.06.30',
-      title: '시스템 업그레이드',
-      description: '주요 시스템 업그레이드 및 기능 개선'
-    },
-    {
-      date: '2024.09.20',
-      title: '사용자 교육',
-      description: '신규 기능 관련 사용자 교육 실시'
-    },
-    {
-      date: '2024.12.15',
-      title: '연간 성과 보고회',
-      description: '연간 사업 성과 평가 및 차년도 계획 수립'
-    }
-  ];
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await fetch('/api/sheets?sheet=EventSection');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        
+        if (!Array.isArray(data) || data.length <= 1) {
+          throw new Error('데이터 형식이 올바르지 않습니다.');
+        }
+
+        // 헤더를 제외한 데이터 행을 처리
+        const formattedEvents = data.slice(1).map(row => ({
+          date: row[0] || '',
+          title: row[1] || '',
+          description: row[2] || '',
+          status: row[3] || '예정'
+        }));
+        
+        setEvents(formattedEvents);
+        setError(null);
+      } catch (error) {
+        console.error('Error fetching events data:', error);
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEvents();
+  }, []);
+
+  if (loading) {
+    return (
+      <Box sx={{ p: 2, textAlign: 'center' }}>
+        <Typography>데이터를 불러오는 중입니다...</Typography>
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box sx={{ p: 2, textAlign: 'center', color: 'error.main' }}>
+        <Typography>데이터를 불러오는데 실패했습니다: {error}</Typography>
+      </Box>
+    );
+  }
 
   return (
     <Box>
-      <Typography variant="h6" gutterBottom>
+      <Typography 
+        variant="h6" 
+        sx={{ 
+          mb: 2,
+          fontWeight: 600,
+          fontSize: '0.9rem',
+          color: 'text.primary',
+        }}
+      >
         주요 이벤트
       </Typography>
       <Grid container spacing={2}>

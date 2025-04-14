@@ -4,43 +4,85 @@ import { useEffect, useState } from 'react';
 export default function ProgressSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [show, setShow] = useState(true);
-
-  // 현재 진행중인 사업 목록
-  const currentProjects = [
-    {
-      name: 'KDI 예비타당성 조사',
-      overview: '지역완결형 글로벌허브 메디컬센터 건립을 위한 예비타당성 조사 진행 중',
-      period: '2024.01 ~ 2024.06',
-      status: '진행중'
-    },
-    {
-      name: '기본계획 수립',
-      overview: '메디컬센터 건립을 위한 기본계획 수립 및 검토',
-      period: '2024.03 ~ 2024.08',
-      status: '진행중'
-    },
-    {
-      name: '부지 환경성 검토',
-      overview: '건립 부지에 대한 환경영향평가 및 환경성 검토 실시',
-      period: '2024.02 ~ 2024.05',
-      status: '진행중'
-    }
-  ];
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
+    // 구글 시트에서 데이터 가져오기
+    const fetchProjects = async () => {
+      try {
+        const response = await fetch('/api/sheets?sheet=ProgressSection');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        
+        if (!Array.isArray(data) || data.length <= 1) {
+          throw new Error('데이터 형식이 올바르지 않습니다.');
+        }
+
+        // 헤더를 제외한 데이터 행을 처리
+        const formattedProjects = data.slice(1).map(row => ({
+          name: row[0] || '',
+          overview: row[1] || '',
+          period: row[2] && row[3] ? `${row[2]} ~ ${row[3]}` : '',
+          status: row[4] || '진행중'
+        }));
+        
+        setProjects(formattedProjects);
+        setError(null);
+      } catch (error) {
+        console.error('Error fetching project data:', error);
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProjects();
+  }, []);
+
+  useEffect(() => {
+    if (projects.length === 0) return;
+
     // 5초마다 다음 프로젝트로 전환
     const interval = setInterval(() => {
       setShow(false);
       setTimeout(() => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % currentProjects.length);
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % projects.length);
         setShow(true);
-      }, 500); // 페이드 아웃 후 다음 항목으로 전환
+      }, 500);
     }, 5000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [projects]);
 
-  const currentProject = currentProjects[currentIndex];
+  if (loading) {
+    return (
+      <Box sx={{ p: 2, textAlign: 'center' }}>
+        <Typography>데이터를 불러오는 중입니다...</Typography>
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box sx={{ p: 2, textAlign: 'center', color: 'error.main' }}>
+        <Typography>데이터를 불러오는데 실패했습니다: {error}</Typography>
+      </Box>
+    );
+  }
+
+  if (projects.length === 0) {
+    return (
+      <Box sx={{ p: 2, textAlign: 'center' }}>
+        <Typography>구글 시트에서 진행중인 사업 데이터를 찾을 수 없습니다.</Typography>
+      </Box>
+    );
+  }
+
+  const currentProject = projects[currentIndex];
 
   return (
     <Box>
@@ -121,7 +163,7 @@ export default function ProgressSection() {
             mt: 2,
             gap: 1 
           }}>
-            {currentProjects.map((_, index) => (
+            {projects.map((_, index) => (
               <Box
                 key={index}
                 sx={{

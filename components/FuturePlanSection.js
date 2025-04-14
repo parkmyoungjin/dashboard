@@ -1,35 +1,62 @@
 import { Box, Typography, List, ListItem, Stack, Chip } from '@mui/material';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import FlagIcon from '@mui/icons-material/Flag';
+import { useState, useEffect } from 'react';
 
 export default function FuturePlanSection() {
-  // 예시 데이터 - 실제 데이터로 교체 필요
-  const plans = [
-    {
-      quarter: '1분기',
-      title: '시스템 고도화',
-      tasks: [
-        '성능 개선',
-        '보안 강화'
-      ]
-    },
-    {
-      quarter: '2분기',
-      title: '확장',
-      tasks: [
-        '신규 개발',
-        '통합 구축'
-      ]
-    },
-    {
-      quarter: '3분기',
-      title: '안정화',
-      tasks: [
-        '모니터링',
-        '장애 대응'
-      ]
-    }
-  ];
+  const [plans, setPlans] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchPlans = async () => {
+      try {
+        const response = await fetch('/api/sheets?sheet=FuturePlanSection');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        
+        if (!Array.isArray(data) || data.length <= 1) {
+          throw new Error('데이터 형식이 올바르지 않습니다.');
+        }
+
+        // 헤더를 제외한 데이터 행을 처리
+        const formattedPlans = data.slice(1).map(row => ({
+          quarter: row[0] || '',
+          title: row[1] || '',
+          tasks: (row[2] || '').split(',').map(task => task.trim()),
+          status: row[3] || '진행예정'
+        }));
+        
+        setPlans(formattedPlans);
+        setError(null);
+      } catch (error) {
+        console.error('Error fetching plans data:', error);
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPlans();
+  }, []);
+
+  if (loading) {
+    return (
+      <Box sx={{ p: 2, textAlign: 'center' }}>
+        <Typography>데이터를 불러오는 중입니다...</Typography>
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box sx={{ p: 2, textAlign: 'center', color: 'error.main' }}>
+        <Typography>데이터를 불러오는데 실패했습니다: {error}</Typography>
+      </Box>
+    );
+  }
 
   return (
     <Box>
