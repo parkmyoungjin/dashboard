@@ -74,7 +74,7 @@ export default function Dashboard() {
                 minHeight: { xs: 'auto', sm: '120px' }
               }}
             >
-              <CurrentStatusSection />
+              <ProgressSection />
             </Paper>
           </Grid>
 
