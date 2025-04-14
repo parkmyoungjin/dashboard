@@ -33,16 +33,29 @@ export default function FuturePlanSection() {
 
   return (
     <Box>
-      <Typography variant="h6" gutterBottom sx={{ mb: 1 }}>
+      <Typography 
+        variant="h6" 
+        sx={{ 
+          mb: 1,
+          fontWeight: 600,
+          fontSize: '0.9rem',
+          color: 'text.primary',
+        }}
+      >
         향후 추진 계획
       </Typography>
+      
       <List sx={{ 
+        p: 0,
         '& .MuiListItem-root': { 
           py: 1,
           px: 2,
-          backgroundColor: 'background.paper',
+          backgroundColor: 'background.default',
           borderRadius: 1,
-          mb: 1 
+          mb: 1,
+          '&:last-child': {
+            mb: 0
+          }
         }
       }}>
         {plans.map((plan, index) => (
@@ -56,7 +69,7 @@ export default function FuturePlanSection() {
                   size="small"
                   sx={{ height: '24px', '& .MuiChip-label': { fontSize: '0.75rem' } }}
                 />
-                <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>
+                <Typography variant="subtitle2" sx={{ fontWeight: 'bold', fontSize: '0.8rem' }}>
                   {plan.title}
                 </Typography>
               </Stack>
