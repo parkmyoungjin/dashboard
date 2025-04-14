@@ -54,45 +54,46 @@ export default function Dashboard() {
       py: { xs: 2, md: 4 },
       background: theme => `linear-gradient(180deg, ${theme.palette.background.default} 0%, ${theme.palette.background.paper} 100%)`,
     }}>
-      <DashboardContainer maxWidth="xl">
-        <PageTitle variant="h4" component="h1">
-          프로젝트 현황 대시보드
-        </PageTitle>
-        
-        <Grid container spacing={3}>
-          {/* 전체 진행률 */}
+      <DashboardContainer maxWidth="lg">
+        <Typography 
+          variant="h5" 
+          sx={{ 
+            mb: 3, 
+            fontWeight: 600,
+            fontSize: { xs: '1.2rem', sm: '1.4rem' }
+          }}
+        >
+          글로벌허브 메디컬센터 사업 진행 현황
+        </Typography>
+
+        <Grid container spacing={2}>
           <Grid item xs={12}>
-            <DashboardCard elevation={0}>
-              <ProgressSection />
-            </DashboardCard>
-          </Grid>
-          
-          {/* 월별 타임라인 */}
-          <Grid item xs={12}>
-            <DashboardCard elevation={0}>
-              <TimelineSection />
-            </DashboardCard>
-          </Grid>
-          
-          {/* 주요 사업 추진 현황 */}
-          <Grid item xs={12} md={6}>
-            <DashboardCard elevation={0}>
+            <Paper 
+              sx={{ 
+                p: 2,
+                minHeight: { xs: 'auto', sm: '120px' }
+              }}
+            >
               <CurrentStatusSection />
-            </DashboardCard>
+            </Paper>
           </Grid>
-          
-          {/* 향후 추진 계획 */}
-          <Grid item xs={12} md={6}>
-            <DashboardCard elevation={0}>
-              <FuturePlanSection />
-            </DashboardCard>
-          </Grid>
-          
-          {/* 주요 이벤트 */}
+
           <Grid item xs={12}>
-            <DashboardCard elevation={0}>
+            <Paper sx={{ p: 2 }}>
+              <TimelineSection />
+            </Paper>
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <Paper sx={{ p: 2 }}>
+              <FuturePlanSection />
+            </Paper>
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <Paper sx={{ p: 2 }}>
               <EventSection />
-            </DashboardCard>
+            </Paper>
           </Grid>
         </Grid>
       </DashboardContainer>
