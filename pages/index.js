@@ -67,15 +67,32 @@ export default function Dashboard() {
         </Typography>
 
         <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <Paper 
-              sx={{ 
-                p: 2,
-                minHeight: { xs: 'auto', sm: '120px' }
-              }}
-            >
-              <ProgressSection />
-            </Paper>
+          <Grid item xs={12} container spacing={2}>
+            <Grid item xs={12} md={4}>
+              <Paper 
+                sx={{ 
+                  p: 2,
+                  height: '100%',
+                  minHeight: { xs: 'auto', sm: '180px' },
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center'
+                }}
+              >
+                <CurrentStatusSection />
+              </Paper>
+            </Grid>
+            <Grid item xs={12} md={8}>
+              <Paper 
+                sx={{ 
+                  p: 2,
+                  height: '100%',
+                  minHeight: { xs: 'auto', sm: '180px' }
+                }}
+              >
+                <ProgressSection />
+              </Paper>
+            </Grid>
           </Grid>
 
           <Grid item xs={12}>
