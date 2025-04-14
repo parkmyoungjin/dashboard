@@ -68,7 +68,7 @@ export default function EventSection() {
   }
 
   return (
-    <Box>
+    <Box sx={{ bgcolor: '#F3F6F9', p: 3, borderRadius: 2, boxShadow: 1 }}>
       <Typography 
         variant="h6" 
         sx={{ 
@@ -83,7 +83,7 @@ export default function EventSection() {
       <Grid container spacing={2}>
         {displayEvents.map((event, index) => (
           <Grid item xs={4} key={index}>
-            <Card sx={{ height: '100%', bgcolor: 'grey.50' }}>
+            <Card sx={{ height: '100%', bgcolor: 'white' }}>
               <CardContent>
                 <Typography variant="subtitle1" sx={{
                   mb: 1,
