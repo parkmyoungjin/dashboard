@@ -9,9 +9,14 @@ import EventSection from '../components/EventSection';
 const DashboardContainer = styled(Container)(({ theme }) => ({
   marginTop: theme.spacing(4),
   marginBottom: theme.spacing(4),
+  maxWidth: '1920px !important',
+  paddingLeft: theme.spacing(4),
+  paddingRight: theme.spacing(4),
   [theme.breakpoints.down('sm')]: {
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
   },
 }));
 
@@ -54,26 +59,26 @@ export default function Dashboard() {
       py: { xs: 2, md: 4 },
       background: theme => `linear-gradient(180deg, ${theme.palette.background.default} 0%, ${theme.palette.background.paper} 100%)`,
     }}>
-      <DashboardContainer maxWidth="lg">
+      <DashboardContainer>
         <Typography 
           variant="h5" 
           sx={{ 
-            mb: 3, 
+            mb: 4, 
             fontWeight: 600,
-            fontSize: { xs: '1.2rem', sm: '1.4rem' }
+            fontSize: { xs: '1.2rem', sm: '1.6rem' }
           }}
         >
           신사업추진팀 Dashboard
         </Typography>
 
-        <Grid container spacing={2}>
-          <Grid item xs={12} container spacing={2}>
-            <Grid item xs={12} md={4}>
+        <Grid container spacing={3}>
+          <Grid item xs={12} container spacing={3}>
+            <Grid item xs={12} md={3}>
               <Paper 
                 sx={{ 
-                  p: 2,
+                  p: 3,
                   height: '100%',
-                  minHeight: { xs: 'auto', sm: '180px' },
+                  minHeight: { xs: 'auto', sm: '200px' },
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'center'
@@ -82,12 +87,12 @@ export default function Dashboard() {
                 <CurrentStatusSection />
               </Paper>
             </Grid>
-            <Grid item xs={12} md={8}>
+            <Grid item xs={12} md={9}>
               <Paper 
                 sx={{ 
-                  p: 2,
+                  p: 3,
                   height: '100%',
-                  minHeight: { xs: 'auto', sm: '180px' }
+                  minHeight: { xs: 'auto', sm: '200px' }
                 }}
               >
                 <ProgressSection />
@@ -96,19 +101,19 @@ export default function Dashboard() {
           </Grid>
 
           <Grid item xs={12}>
-            <Paper sx={{ p: 2 }}>
+            <Paper sx={{ p: 3 }}>
               <TimelineSection />
             </Paper>
           </Grid>
 
           <Grid item xs={12} md={6}>
-            <Paper sx={{ p: 2 }}>
+            <Paper sx={{ p: 3 }}>
               <FuturePlanSection />
             </Paper>
           </Grid>
 
           <Grid item xs={12} md={6}>
-            <Paper sx={{ p: 2 }}>
+            <Paper sx={{ p: 3 }}>
               <EventSection />
             </Paper>
           </Grid>
