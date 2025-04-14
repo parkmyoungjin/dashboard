@@ -1,93 +1,57 @@
-import { Box, Typography, List, ListItem, Stack, Chip } from '@mui/material';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import PlayCircleIcon from '@mui/icons-material/PlayCircle';
+import { Box, Typography, Chip, Stack } from '@mui/material';
+import { styled } from '@mui/material/styles';
+
+const StatusChip = styled(Chip)(({ theme }) => ({
+  height: 24,
+  fontSize: '0.7rem',
+  '& .MuiChip-label': {
+    padding: '0 8px',
+  }
+}));
 
 export default function CurrentStatusSection() {
-  // 예시 데이터 - 실제 데이터로 교체 필요
-  const statusItems = [
-    {
-      title: '기반 시설',
-      completedTasks: [
-        '인프라 구축',
-        '보안 설치'
-      ],
-      inProgressTasks: [
-        '시스템 점검'
-      ]
-    },
-    {
-      title: '시스템',
-      completedTasks: [
-        '코어 개발',
-        'API 구현'
-      ],
-      inProgressTasks: [
-        '테스트'
-      ]
-    },
-    {
-      title: '사용자',
-      completedTasks: [
-        '교육 완료',
-        '매뉴얼'
-      ],
-      inProgressTasks: [
-        '피드백'
-      ]
-    }
+  const completedTasks = [
+    { label: '사업계획 수립', color: 'success' },
+    { label: '부지선정', color: 'success' },
+    { label: '예비타당성 조사', color: 'success' },
+    { label: '기본계획 수립', color: 'primary' },
   ];
 
   return (
     <Box>
-      <Typography variant="h6" gutterBottom sx={{ mb: 1 }}>
-        주요 사업 추진 현황
+      <Typography 
+        variant="h6" 
+        sx={{ 
+          mb: 1,
+          fontWeight: 600,
+          fontSize: '0.9rem',
+          color: 'text.primary',
+        }}
+      >
+        전체 사업 진행률
       </Typography>
-      <List sx={{ 
-        '& .MuiListItem-root': { 
-          py: 1,
-          px: 2,
-          backgroundColor: 'background.paper',
-          borderRadius: 1,
-          mb: 1 
-        }
-      }}>
-        {statusItems.map((item, index) => (
-          <ListItem key={index}>
-            <Stack direction="row" alignItems="center" spacing={2} width="100%">
-              <Typography variant="subtitle2" sx={{ 
-                fontWeight: 'bold',
-                minWidth: '80px'
-              }}>
-                {item.title}
-              </Typography>
-              <Stack direction="row" spacing={1} flexWrap="wrap" gap={0.5}>
-                {item.completedTasks.map((task, i) => (
-                  <Chip
-                    key={i}
-                    icon={<CheckCircleIcon sx={{ fontSize: '0.9rem' }} />}
-                    label={task}
-                    color="success"
-                    size="small"
-                    variant="outlined"
-                    sx={{ height: '24px', '& .MuiChip-label': { fontSize: '0.75rem' } }}
-                  />
-                ))}
-                {item.inProgressTasks.map((task, i) => (
-                  <Chip
-                    key={i}
-                    icon={<PlayCircleIcon sx={{ fontSize: '0.9rem' }} />}
-                    label={task}
-                    color="primary"
-                    size="small"
-                    variant="outlined"
-                    sx={{ height: '24px', '& .MuiChip-label': { fontSize: '0.75rem' } }}
-                  />
-                ))}
-              </Stack>
-            </Stack>
-          </ListItem>
+      
+      <Stack 
+        direction="row" 
+        spacing={1} 
+        sx={{ 
+          flexWrap: 'wrap', 
+          gap: 0.5,
+          '& > *': {
+            marginBottom: '4px !important',
+          }
+        }}
+      >
+        {completedTasks.map((task, index) => (
+          <StatusChip
+            key={index}
+            label={task.label}
+            color={task.color}
+            variant="outlined"
+            size="small"
+          />
         ))}
-      </List>
+      </Stack>
     </Box>
   );
 } 
