@@ -37,27 +37,16 @@ const StatusIcon = ({ icon: Icon, label, isActive }) => {
           color: isActive ? '#2196f3' : '#94a3b8'
         }} />
       </Box>
-      <Box sx={{ 
-        height: '22px',
-        position: 'absolute',
-        bottom: 0,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}>
-        {label && (
-          <Typography 
-            variant="body2" 
-            sx={{ 
-              color: isActive ? '#2196f3' : '#94a3b8',
-              fontWeight: 600,
-              fontSize: '0.9rem'
-            }}
-          >
-            {label}
-          </Typography>
-        )}
-      </Box>
+      <Typography 
+        sx={{ 
+          color: isActive ? '#2196f3' : '#94a3b8',
+          fontSize: '0.8rem',
+          mt: 1,
+          fontWeight: 500
+        }}
+      >
+        {label}
+      </Typography>
     </Box>
   );
 };
@@ -65,33 +54,34 @@ const StatusIcon = ({ icon: Icon, label, isActive }) => {
 export default function CurrentStatusSection() {
   return (
     <Box sx={{ 
+      height: '192px',
       width: '100%',
       maxWidth: '800px',
       margin: '0 auto',
-      px: 2,
-      pb: 1.5
+      p: 2,
+      bgcolor: '#1e293b',
+      borderRadius: 1
     }}>
       <Typography 
         variant="h6" 
         sx={{ 
           fontWeight: 600,
-          fontSize: '0.9rem',
-          color: 'text.primary',
-          mb: 2,
-          textAlign: 'left'
+          fontSize: '1rem',
+          color: '#fff',
+          mb: 1.5
         }}
       >
         지역완결형 글로벌허브 메디컬센터 사업 진행률
       </Typography>
-
       <Box sx={{
-        bgcolor: '#1B2028',
+        height: 'calc(100% - 44px)',
+        width: '100%',
+        bgcolor: '#0f172a',
         borderRadius: 2,
-        pt: 2,
-        px: 2,
-        pb: 1.5,
+        p: 2,
         display: 'flex',
-        alignItems: 'center',
+        flexDirection: 'column',
+        justifyContent: 'center'
       }}>
         <Box sx={{ 
           display: 'flex', 
@@ -100,13 +90,13 @@ export default function CurrentStatusSection() {
           gap: 2,
           width: '100%'
         }}>
-          <StatusIcon icon={DescriptionIcon} label="진행중" isActive={true} />
+          <StatusIcon icon={DescriptionIcon} label="예비타당성" isActive={true} />
           <ArrowIcon />
-          <StatusIcon icon={ArchitectureIcon} isActive={false} />
+          <StatusIcon icon={ArchitectureIcon} label="설계" isActive={false} />
           <ArrowIcon />
-          <StatusIcon icon={ApartmentIcon} isActive={false} />
+          <StatusIcon icon={ApartmentIcon} label="건축" isActive={false} />
           <ArrowIcon />
-          <StatusIcon icon={DomainVerificationIcon} isActive={false} />
+          <StatusIcon icon={DomainVerificationIcon} label="완공" isActive={false} />
         </Box>
       </Box>
     </Box>

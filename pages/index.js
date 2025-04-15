@@ -59,7 +59,7 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('/api/sheets');
+        const response = await fetch('/api/sheets?sheet=progress');
         const data = await response.json();
         setProgress(data.progress || []);
       } catch (error) {
@@ -91,42 +91,63 @@ export default function Dashboard() {
 
         <Grid container spacing={4}>
           <Grid item xs={12} container spacing={3}>
-            <Grid item xs={12} md={4} sx={{ 
-              display: 'flex', 
-              justifyContent: 'center',
-              alignItems: 'flex-start'
-            }}>
+            <Grid item xs={12} md={4}>
               <ProgressSection />
             </Grid>
             <Grid item xs={12} md={4}>
-              <Paper sx={{ p: 2 }}>
-                <CurrentStatusSection />
-              </Paper>
+              <CurrentStatusSection />
             </Grid>
             <Grid item xs={12} md={4}>
-              <Paper sx={{ p: 2 }}>
-                <NewsSection news={[
-                  { title: '첫 번째 이슈 제목입니다.', date: '2024-04-08' },
-                  { title: '두 번째 이슈 제목입니다.', date: '2024-04-08' },
-                  { title: '세 번째 이슈 제목입니다.', date: '2024-04-08' }
-                ]} />
-              </Paper>
+              <NewsSection news={[
+                { title: '첫 번째 이슈 제목입니다.', date: '2024-04-08' },
+                { title: '두 번째 이슈 제목입니다.', date: '2024-04-08' },
+                { title: '세 번째 이슈 제목입니다.', date: '2024-04-08' }
+              ]} />
             </Grid>
 
             <Grid item xs={12}>
-              <Paper sx={{ p: 3 }}>
+              <Paper sx={{ 
+                p: 3,
+                height: '300px',
+                display: 'flex',
+                flexDirection: 'column'
+              }}>
                 <TimelineSection />
               </Paper>
             </Grid>
 
             <Grid item xs={12} md={6}>
-              <Paper sx={{ p: 3 }}>
+              <Paper sx={{ 
+                p: 0,
+                height: '160px',
+                display: 'flex',
+                flexDirection: 'column',
+                overflow: 'hidden',
+                '& > div': {
+                  padding: 3,
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                }
+              }}>
                 <FuturePlanSection />
               </Paper>
             </Grid>
 
             <Grid item xs={12} md={6}>
-              <Paper sx={{ p: 3 }}>
+              <Paper sx={{ 
+                p: 0,
+                height: '160px',
+                display: 'flex',
+                flexDirection: 'column',
+                overflow: 'hidden',
+                '& > div': {
+                  padding: 3,
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                }
+              }}>
                 <EventSection />
               </Paper>
             </Grid>

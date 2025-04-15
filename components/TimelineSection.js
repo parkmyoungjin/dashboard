@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react';
 
 const TimelineBar = styled(Box)(({ theme }) => ({
   position: 'relative',
-  height: 24,
-  borderRadius: theme.spacing(0.5),
-  marginBottom: theme.spacing(0.25),
+  height: 42,
+  borderRadius: theme.spacing(0.75),
+  marginBottom: theme.spacing(1),
 }));
 
 const ProjectBar = styled(Box)(({ theme }) => ({
@@ -19,17 +19,30 @@ const ProjectBar = styled(Box)(({ theme }) => ({
   paddingLeft: theme.spacing(1),
   paddingRight: theme.spacing(1),
   cursor: 'pointer',
+  border: 'none',
   '&:hover': {
     filter: 'brightness(1.1)',
   },
 }));
 
-const MonthLabel = styled(Typography)(({ theme }) => ({
-  fontSize: '0.7rem',
-  color: theme.palette.text.secondary,
+const MonthLabel = styled(Typography)(({ theme, isCurrentMonth }) => ({
+  fontSize: '0.9rem',
+  color: isCurrentMonth ? theme.palette.primary.main : theme.palette.text.secondary,
   textAlign: 'center',
   position: 'relative',
-  paddingBottom: theme.spacing(0.5),
+  paddingBottom: theme.spacing(1.5),
+  fontWeight: isCurrentMonth ? 600 : 400,
+  '&::after': isCurrentMonth ? {
+    content: '""',
+    position: 'absolute',
+    bottom: 4,
+    left: '50%',
+    transform: 'translateX(-50%)',
+    width: '5px',
+    height: '5px',
+    borderRadius: '50%',
+    backgroundColor: theme.palette.primary.main
+  } : {}
 }));
 
 const TimelineContainer = styled(Box)(({ theme }) => ({
@@ -60,7 +73,7 @@ const CurrentDateLine = styled(Box)(({ theme, left }) => ({
   width: 2,
   height: '100%',
   top: 0,
-  background: 'linear-gradient(180deg, #f87171 0%, rgba(248, 113, 113, 0.2) 100%)',
+  background: 'linear-gradient(180deg, #60a5fa 0%, rgba(96, 165, 250, 0.2) 100%)',
   zIndex: 2
 }));
 
@@ -71,21 +84,20 @@ export default function TimelineSection() {
 
   // 파스텔 색상 생성 함수
   const getProjectColor = (index) => {
-    // 미리 정의된 파스텔 색상 배열
+    // 대시보드 테마와 어울리는 색상 배열
     const colors = [
-      'hsla(210, 70%, 80%, 0.9)', // 파스텔 블루
-      'hsla(340, 70%, 80%, 0.9)', // 파스텔 핑크
-      'hsla(160, 70%, 80%, 0.9)', // 파스텔 그린
-      'hsla(45, 70%, 80%, 0.9)',  // 파스텔 옐로우
-      'hsla(280, 70%, 80%, 0.9)', // 파스텔 퍼플
-      'hsla(20, 70%, 80%, 0.9)',  // 파스텔 오렌지
-      'hsla(180, 70%, 80%, 0.9)', // 파스텔 터콰이즈
-      'hsla(120, 70%, 80%, 0.9)', // 파스텔 라임
-      'hsla(300, 70%, 80%, 0.9)', // 파스텔 마젠타
-      'hsla(60, 70%, 80%, 0.9)',  // 파스텔 레몬
+      'hsla(217, 91%, 60%, 0.8)',  // 밝은 파란색 (#60a5fa)
+      'hsla(199, 89%, 48%, 0.8)',  // 하늘색 (#0ea5e9)
+      'hsla(186, 91%, 36%, 0.8)',  // 청록색 (#0d9488)
+      'hsla(231, 91%, 60%, 0.8)',  // 인디고 (#6366f1)
+      'hsla(262, 83%, 58%, 0.8)',  // 보라색 (#7c3aed)
+      'hsla(291, 91%, 65%, 0.8)',  // 자주색 (#d946ef)
+      'hsla(334, 86%, 46%, 0.8)',  // 분홍색 (#db2777)
+      'hsla(245, 58%, 51%, 0.8)',  // 남색 (#4f46e5)
+      'hsla(199, 89%, 48%, 0.8)',  // 하늘색 (#0ea5e9)
+      'hsla(217, 91%, 60%, 0.8)',  // 밝은 파란색 (#60a5fa)
     ];
     
-    // 인덱스에 따라 색상 순환
     return colors[index % colors.length];
   };
 
@@ -135,20 +147,54 @@ export default function TimelineSection() {
   const monthProgress = (currentDay - 1) / daysInMonth;
   const currentPosition = ((currentMonth - 1) * 8.33) + (monthProgress * 8.33);
 
-  // 프로젝트를 3줄로 강제 배치
+  // 프로젝트를 최대 4줄로 최적 배치하고 겹치지 않는 프로젝트는 같은 행에 배치
   const arrangeProjects = () => {
-    const rows = [[], [], []];
-    let currentRow = 0;
-
+    const rows = [[], [], [], []];  // 최대 4줄
+    
     // 시작 시점으로 정렬
     const sortedProjects = [...projects].sort((a, b) => a.duration.start - b.duration.start);
     
     sortedProjects.forEach(project => {
-      rows[currentRow].push(project);
-      currentRow = (currentRow + 1) % 3;
+      // 각 행을 순회하면서 프로젝트를 배치할 수 있는 위치 찾기
+      let placed = false;
+      
+      for (let i = 0; i < rows.length && !placed; i++) {
+        const row = rows[i];
+        // 현재 행의 마지막 프로젝트 확인
+        const lastProject = row[row.length - 1];
+        
+        // 행이 비어있거나 마지막 프로젝트와 겹치지 않으면 배치
+        if (!lastProject || lastProject.duration.end < project.duration.start) {
+          row.push(project);
+          placed = true;
+        } else {
+          // 현재 행의 모든 프로젝트와 겹치는지 확인
+          let canPlaceInRow = true;
+          for (const existingProject of row) {
+            // 프로젝트 기간이 겹치는지 확인
+            if (!(existingProject.duration.end < project.duration.start || 
+                 existingProject.duration.start > project.duration.end)) {
+              canPlaceInRow = false;
+              break;
+            }
+          }
+          if (canPlaceInRow) {
+            // 기간이 겹치지 않으면 현재 행에 추가하고 시작 시점 순으로 정렬
+            row.push(project);
+            row.sort((a, b) => a.duration.start - b.duration.start);
+            placed = true;
+          }
+        }
+      }
+      
+      // 모든 행을 확인했는데도 배치하지 못했다면 마지막 행에 강제 배치
+      if (!placed) {
+        rows[rows.length - 1].push(project);
+      }
     });
     
-    return rows;
+    // 빈 행 제거
+    return rows.filter(row => row.length > 0);
   };
 
   if (loading) {
@@ -174,9 +220,9 @@ export default function TimelineSection() {
       <Typography 
         variant="h6" 
         sx={{ 
-          mb: 1,
+          mb: 2,
           fontWeight: 600,
-          fontSize: '0.9rem',
+          fontSize: '1rem',
           color: 'text.primary',
         }}
       >
@@ -187,51 +233,55 @@ export default function TimelineSection() {
         <Grid container spacing={0}>
           {months.map((month, index) => (
             <Grid item xs={1} key={index}>
-              <MonthLabel>{month}</MonthLabel>
+              <MonthLabel isCurrentMonth={index + 1 === currentMonth}>
+                {month}
+              </MonthLabel>
             </Grid>
           ))}
         </Grid>
 
         <TimelineContainer>
-          {projectRows.map((row, rowIndex) => (
-            <Box key={rowIndex}>
+          {projectRows.slice(0, 4).map((row, rowIndex) => (
+            <TimelineBar key={rowIndex}>
               {row.map((project, index) => (
                 <Tooltip 
                   key={`${rowIndex}-${index}`}
                   title={`${project.name}: ${project.description}`}
                   arrow
                 >
-                  <TimelineBar>
-                    <ProjectBar
-                      sx={{
-                        left: `${(project.duration.start - 1) * 8.33}%`,
-                        width: `${(project.duration.end - project.duration.start + 1) * 8.33}%`,
-                        background: project.color,
-                        boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
+                  <ProjectBar
+                    sx={{
+                      left: `calc(${(project.duration.start - 1) * 8.33}% + 2px)`,
+                      width: `calc(${(project.duration.end - project.duration.start + 1) * 8.33}% - 4px)`,
+                      background: (theme) => `linear-gradient(90deg, 
+                        rgba(255,255,255,0.1) 0%, 
+                        ${project.color} 100%)`,
+                      boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
+                      zIndex: 1
+                    }}
+                  >
+                    <Typography 
+                      variant="caption" 
+                      sx={{ 
+                        color: '#ffffff',
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        fontWeight: 600,
+                        fontSize: '1.1rem',
+                        textShadow: '0 1px 2px rgba(0,0,0,0.2)',
+                        letterSpacing: '0.2px',
                       }}
                     >
-                      <Typography 
-                        variant="caption" 
-                        sx={{ 
-                          color: 'rgba(0, 0, 0, 0.7)',
-                          whiteSpace: 'nowrap',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          fontWeight: 600,
-                          fontSize: '0.85rem',
-                        }}
-                      >
-                        {project.name}
-                      </Typography>
-                    </ProjectBar>
-                  </TimelineBar>
+                      {project.name}
+                    </Typography>
+                  </ProjectBar>
                 </Tooltip>
               ))}
-            </Box>
+            </TimelineBar>
           ))}
+          <CurrentDateLine left={currentPosition} />
         </TimelineContainer>
-        
-        <CurrentDateLine left={currentPosition} />
       </Box>
     </Box>
   );

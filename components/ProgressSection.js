@@ -63,19 +63,21 @@ export default function ProgressSection() {
       <Box sx={{ 
         height: '192px',
         width: '100%',
-        bgcolor: '#1e293b',
-        borderRadius: 1,
-        p: '12px 16px',
+        maxWidth: '800px',
+        margin: '0 auto',
+        p: 2,
         display: 'flex',
         flexDirection: 'column',
+        bgcolor: '#1e293b',
+        borderRadius: 1
       }}>
         <Typography 
           variant="h6" 
           sx={{ 
             fontWeight: 600,
-            fontSize: '0.9rem',
+            fontSize: '1rem',
             color: '#fff',
-            mb: 1,
+            mb: 0.75,
             flexShrink: 0,
           }}
         >
@@ -102,19 +104,21 @@ export default function ProgressSection() {
       <Box sx={{ 
         height: '192px',
         width: '100%',
-        bgcolor: '#1e293b',
-        borderRadius: 1,
-        p: '12px 16px',
+        maxWidth: '800px',
+        margin: '0 auto',
+        p: 2,
         display: 'flex',
         flexDirection: 'column',
+        bgcolor: '#1e293b',
+        borderRadius: 1
       }}>
         <Typography 
           variant="h6" 
           sx={{ 
             fontWeight: 600,
-            fontSize: '0.9rem',
+            fontSize: '1rem',
             color: '#fff',
-            mb: 1,
+            mb: 0.75,
             flexShrink: 0,
           }}
         >
@@ -141,19 +145,21 @@ export default function ProgressSection() {
       <Box sx={{ 
         height: '192px',
         width: '100%',
-        bgcolor: '#1e293b',
-        borderRadius: 1,
-        p: '12px 16px',
+        maxWidth: '800px',
+        margin: '0 auto',
+        p: 2,
         display: 'flex',
         flexDirection: 'column',
+        bgcolor: '#1e293b',
+        borderRadius: 1
       }}>
         <Typography 
           variant="h6" 
           sx={{ 
             fontWeight: 600,
-            fontSize: '0.9rem',
+            fontSize: '1rem',
             color: '#fff',
-            mb: 1,
+            mb: 0.75,
             flexShrink: 0,
           }}
         >
@@ -181,32 +187,36 @@ export default function ProgressSection() {
     <Box sx={{ 
       height: '192px',
       width: '100%',
-      bgcolor: '#1e293b',
-      borderRadius: 1,
-      p: '12px',
+      maxWidth: '800px',
+      margin: '0 auto',
+      p: 2,
       display: 'flex',
       flexDirection: 'column',
+      bgcolor: '#1e293b',
+      borderRadius: 1
     }}>
       <Typography 
         variant="h6" 
         sx={{ 
           fontWeight: 600,
-          fontSize: '0.9rem',
+          fontSize: '1rem',
           color: '#fff',
-          mb: 1,
-          flexShrink: 0,
+          mb: 1.5,
+          flexShrink: 0
         }}
       >
         현재 진행중인 사업 현황
       </Typography>
 
       <Box sx={{ 
-        flex: 1,
+        height: 'calc(100% - 44px)',
+        width: '100%',
         bgcolor: '#0f172a',
         borderRadius: 2,
-        p: '12px',
+        p: 2,
         display: 'flex',
         flexDirection: 'column',
+        justifyContent: 'space-between'
       }}>
         <Fade in={show} timeout={500}>
           <Box sx={{ 
@@ -272,19 +282,18 @@ export default function ProgressSection() {
 
             <Box sx={{ 
               display: 'flex', 
-              justifyContent: 'center',
-              gap: 1,
-              mt: 'auto',
-              pt: 1
+              justifyContent: 'center', 
+              gap: 0.5,
+              mt: 1
             }}>
               {projects.map((_, index) => (
                 <Box
                   key={index}
                   sx={{
-                    width: 8,
-                    height: 8,
+                    width: '4px',
+                    height: '4px',
                     borderRadius: '50%',
-                    bgcolor: index === currentIndex ? '#60a5fa' : 'rgba(96, 165, 250, 0.2)',
+                    bgcolor: index === currentIndex ? '#60a5fa' : 'rgba(96, 165, 250, 0.3)',
                     transition: 'background-color 0.3s'
                   }}
                 />

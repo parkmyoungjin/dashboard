@@ -1,5 +1,6 @@
-import { Box, Typography, Card, CardContent, Grid } from '@mui/material';
+import { Box, Typography, Card, CardContent, Grid, Stack, Chip } from '@mui/material';
 import { useState, useEffect } from 'react';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
 export default function EventSection() {
   const [events, setEvents] = useState([]);
@@ -42,95 +43,191 @@ export default function EventSection() {
   }, []);
 
   useEffect(() => {
-    if (!events || events.length <= 3) return;
+    if (!events || events.length <= 1) return;
     const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 3) >= events.length ? 0 : prevIndex + 3);
-    }, 3000);
+      setCurrentIndex((prevIndex) => (prevIndex + 1) >= events.length ? 0 : prevIndex + 1);
+    }, 10000);
     return () => clearInterval(interval);
   }, [events]);
 
-  const displayEvents = events.slice(currentIndex, currentIndex + 3);
+  const currentEvent = events[currentIndex];
 
   if (loading) {
     return (
-      <Box sx={{ p: 2, textAlign: 'center' }}>
-        <Typography>데이터를 불러오는 중입니다...</Typography>
+      <Box sx={{ 
+        height: '192px',
+        width: '100%',
+        maxWidth: '800px',
+        margin: '0 auto',
+        p: 2,
+        bgcolor: '#1e293b',
+        borderRadius: 1,
+        display: 'flex',
+        flexDirection: 'column'
+      }}>
+        <Typography 
+          variant="h6" 
+          sx={{ 
+            fontWeight: 600,
+            fontSize: '0.9rem',
+            color: '#fff',
+            mb: 0.75
+          }}
+        >
+          주요 이벤트
+        </Typography>
+        <Box sx={{ 
+          flex: 1,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          <Typography>데이터를 불러오는 중입니다...</Typography>
+        </Box>
       </Box>
     );
   }
 
   if (error) {
     return (
-      <Box sx={{ p: 2, textAlign: 'center', color: 'error.main' }}>
-        <Typography>데이터를 불러오는데 실패했습니다: {error}</Typography>
+      <Box sx={{ 
+        height: '192px',
+        width: '100%',
+        maxWidth: '800px',
+        margin: '0 auto',
+        p: 2,
+        bgcolor: '#1e293b',
+        borderRadius: 1,
+        display: 'flex',
+        flexDirection: 'column'
+      }}>
+        <Typography 
+          variant="h6" 
+          sx={{ 
+            fontWeight: 600,
+            fontSize: '0.9rem',
+            color: '#fff',
+            mb: 0.75
+          }}
+        >
+          주요 이벤트
+        </Typography>
+        <Box sx={{ 
+          flex: 1,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          <Typography color="error.main">데이터를 불러오는데 실패했습니다: {error}</Typography>
+        </Box>
       </Box>
     );
   }
 
   return (
-    <Box sx={{ bgcolor: '#1B2028', p: 3, borderRadius: 2, boxShadow: 1, height: '192px' }}>
+    <Box sx={{ 
+      height: '100%',
+      width: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+    }}>
       <Typography 
         variant="h6" 
         sx={{ 
-          mb: 1,
           fontWeight: 600,
-          fontSize: '0.9rem',
-          color: 'text.primary'
+          fontSize: '1rem',
+          color: '#fff',
+          mb: 1.5
         }}
       >
-        주요 이벤트
+        주요 일정
       </Typography>
-      <Grid container spacing={2}>
-        {displayEvents.map((event, index) => (
-          <Grid item xs={4} key={index}>
-            <Card sx={{ height: '100%', bgcolor: '#232B38' }}>
-              <CardContent sx={{ py: 1.5, px: 2, '&:last-child': { pb: 1.5 } }}>
-                <Typography variant="subtitle1" sx={{
-                  mb: 0.75,
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
-                  color: '#fff'
-                }}>
-                  {event.title}
-                </Typography>
-                <Typography variant="body2" sx={{
-                  mb: 0.75,
-                  overflow: 'hidden',
-                  display: '-webkit-box',
-                  WebkitLineClamp: 2,
-                  WebkitBoxOrient: 'vertical',
-                  color: '#a0aec0'
-                }}>
-                  {event.description}
-                </Typography>
-                <Typography variant="caption" sx={{ 
-                  color: '#a0aec0'
-                }}>
-                  {event.date}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-      {events.length > 3 && (
-        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2, gap: 1 }}>
-          {Array.from({ length: Math.ceil(events.length / 3) }).map((_, idx) => (
-            <Box
-              key={idx}
-              onClick={() => setCurrentIndex(idx * 3)}
-              sx={{
-                width: 8,
-                height: 8,
-                borderRadius: '50%',
-                bgcolor: Math.floor(currentIndex / 3) === idx ? 'primary.main' : 'grey.300',
-                cursor: 'pointer'
-              }}
-            />
-          ))}
+      <Box sx={{
+        flex: 1,
+        width: '100%',
+        bgcolor: '#0f172a',
+        borderRadius: 1,
+        p: 1.5,
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden'
+      }}>
+        <Box sx={{ flex: 1 }}>
+          {currentEvent && (
+            <>
+              <Box sx={{ 
+                display: 'flex', 
+                height: '100%',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                mt: 0.5
+              }}>
+                <Stack direction="row" spacing={1} alignItems="center" sx={{ width: '100%' }}>
+                  <Chip
+                    icon={<CalendarTodayIcon sx={{ fontSize: '1.3rem' }} />}
+                    label={currentEvent.title}
+                    color="primary"
+                    size="small"
+                    sx={{ 
+                      height: '32px',
+                      '& .MuiChip-label': { 
+                        fontSize: '1.1rem',
+                        fontWeight: 600
+                      } 
+                    }}
+                  />
+                  <Typography sx={{
+                    color: '#94a3b8',
+                    fontSize: '1.1rem',
+                    flex: 1,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
+                  }}>
+                    {currentEvent.description}
+                  </Typography>
+                  <Chip
+                    label={currentEvent.date}
+                    color="info"
+                    size="small"
+                    variant="outlined"
+                    sx={{ 
+                      height: '24px',
+                      minWidth: 'fit-content',
+                      '& .MuiChip-label': { 
+                        fontSize: '0.75rem' 
+                      } 
+                    }}
+                  />
+                </Stack>
+              </Box>
+            </>
+          )}
         </Box>
-      )}
+        {events.length > 1 && (
+          <Box sx={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            gap: 0.5,
+            mt: 1
+          }}>
+            {Array.from({ length: events.length }).map((_, idx) => (
+              <Box
+                key={idx}
+                onClick={() => setCurrentIndex(idx)}
+                sx={{
+                  width: '4px',
+                  height: '4px',
+                  borderRadius: '50%',
+                  bgcolor: currentIndex === idx ? '#60a5fa' : 'rgba(96, 165, 250, 0.3)',
+                  transition: 'background-color 0.3s',
+                  cursor: 'pointer'
+                }}
+              />
+            ))}
+          </Box>
+        )}
+      </Box>
     </Box>
   );
 } 

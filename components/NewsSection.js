@@ -24,6 +24,9 @@ export default function NewsSection() {
       }
       const data = await response.json();
       
+      // API 응답 데이터 구조 확인
+      console.log('API Response:', data[0]);
+      
       // HTML 엔티티를 실제 문자로 변환하는 함수
       const decodeHTMLEntities = (text) => {
         const textarea = document.createElement('textarea');
@@ -52,10 +55,22 @@ export default function NewsSection() {
         } catch (e) {
           console.error('Error parsing URL:', e);
         }
+
+        // 날짜 형식 변환
+        let formattedDate = '날짜 정보 없음';
+        try {
+          if (news.pubDate) {
+            formattedDate = news.pubDate;  // API에서 이미 형식화된 날짜를 직접 사용
+          }
+        } catch (e) {
+          console.error('Error formatting date:', e);
+        }
+
         return {
           ...news,
           title: decodeHTMLEntities(news.title), // 제목의 HTML 엔티티 디코딩
-          source
+          source,
+          date: formattedDate
         };
       });
       
@@ -88,8 +103,26 @@ export default function NewsSection() {
 
   if (loading) {
     return (
-      <Box sx={{ height: '160px', display: 'flex', flexDirection: 'column' }}>
-        <Typography variant="h6" sx={{ mb: 1, fontWeight: 600, fontSize: '1rem' }}>
+      <Box sx={{ 
+        height: '192px',
+        width: '100%',
+        maxWidth: '800px',
+        margin: '0 auto',
+        p: 2,
+        bgcolor: '#1e293b',
+        borderRadius: 1,
+        display: 'flex',
+        flexDirection: 'column'
+      }}>
+        <Typography 
+          variant="h6" 
+          sx={{ 
+            fontWeight: 600,
+            fontSize: '1rem',
+            color: '#fff',
+            mb: 1.5
+          }}
+        >
           Medical News
         </Typography>
         <Box sx={{ 
@@ -107,8 +140,26 @@ export default function NewsSection() {
 
   if (error) {
     return (
-      <Box sx={{ height: '160px', display: 'flex', flexDirection: 'column' }}>
-        <Typography variant="h6" sx={{ mb: 1, fontWeight: 600, fontSize: '1rem' }}>
+      <Box sx={{ 
+        height: '192px',
+        width: '100%',
+        maxWidth: '800px',
+        margin: '0 auto',
+        p: 2,
+        bgcolor: '#1e293b',
+        borderRadius: 1,
+        display: 'flex',
+        flexDirection: 'column'
+      }}>
+        <Typography 
+          variant="h6" 
+          sx={{ 
+            fontWeight: 600,
+            fontSize: '1rem',
+            color: '#fff',
+            mb: 1.5
+          }}
+        >
           Medical News
         </Typography>
         <Box sx={{ 
@@ -125,8 +176,26 @@ export default function NewsSection() {
 
   if (!news.length) {
     return (
-      <Box sx={{ height: '160px', display: 'flex', flexDirection: 'column' }}>
-        <Typography variant="h6" sx={{ mb: 1, fontWeight: 600, fontSize: '1rem' }}>
+      <Box sx={{ 
+        height: '192px',
+        width: '100%',
+        maxWidth: '800px',
+        margin: '0 auto',
+        p: 2,
+        bgcolor: '#1e293b',
+        borderRadius: 1,
+        display: 'flex',
+        flexDirection: 'column'
+      }}>
+        <Typography 
+          variant="h6" 
+          sx={{ 
+            fontWeight: 600,
+            fontSize: '1rem',
+            color: '#fff',
+            mb: 1.5
+          }}
+        >
           Medical News
         </Typography>
         <Box sx={{ 
@@ -142,35 +211,49 @@ export default function NewsSection() {
   }
 
   return (
-    <Box sx={{ height: '160px', display: 'flex', flexDirection: 'column' }}>
-      <Typography variant="h6" sx={{ mb: 1, fontWeight: 600, fontSize: '1rem' }}>
+    <Box sx={{ 
+      height: '192px',
+      width: '100%',
+      maxWidth: '800px',
+      margin: '0 auto',
+      p: 2,
+      bgcolor: '#1e293b',
+      borderRadius: 1,
+      display: 'flex',
+      flexDirection: 'column'
+    }}>
+      <Typography 
+        variant="h6" 
+        sx={{ 
+          fontWeight: 600,
+          fontSize: '1rem',
+          color: '#fff',
+          mb: 1.5
+        }}
+      >
         Medical News
       </Typography>
-      <Card sx={{ 
-        flex: 1,
-        bgcolor: '#1B2028',
+      <Box sx={{ 
+        height: 'calc(100% - 44px)',
+        width: '100%',
+        bgcolor: '#0f172a',
         borderRadius: 2,
         p: 2,
-        height: '100%',
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        justifyContent: 'space-between'
       }}>
-        <CardContent sx={{ 
-          flex: 1, 
-          py: 0.5, 
-          px: 2, 
-          '&:last-child': { 
-            pb: 1 
-          } 
+        <Box sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 0.5
         }}>
           <Typography 
             variant="caption" 
             sx={{ 
               color: '#94a3b8',
               fontSize: '0.8rem',
-              fontWeight: 600,
-              mb: 0.5,
-              display: 'block'
+              fontWeight: 600
             }}
           >
             {news[currentIndex]?.source}
@@ -180,48 +263,51 @@ export default function NewsSection() {
             target="_blank" 
             rel="noopener"
             sx={{ 
-              color: '#60a5fa',
+              color: '#fff',
               textDecoration: 'none',
               '&:hover': {
                 textDecoration: 'underline'
               }
             }}
           >
-            <Typography variant="subtitle1" sx={{ 
+            <Typography sx={{ 
               fontWeight: 500,
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               whiteSpace: 'nowrap',
-              mb: 0.5,
               fontSize: '1.5rem',
-              lineHeight: 1.5
+              lineHeight: 1.3,
+              mb: 0.5
             }}>
               {news[currentIndex]?.title}
             </Typography>
           </Link>
-          <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.75rem' }}>
-            {news[currentIndex]?.pubDate}
+          <Typography sx={{ 
+            color: '#94a3b8',
+            fontSize: '0.8rem'
+          }}>
+            {news[currentIndex]?.date}
           </Typography>
-        </CardContent>
-      </Card>
-      <Box sx={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        mt: 0.5,
-        gap: 0.5
-      }}>
-        {news.map((_, index) => (
-          <Box
-            key={index}
-            sx={{
-              width: '4px',
-              height: '4px',
-              borderRadius: '50%',
-              bgcolor: index === currentIndex ? '#60a5fa' : 'rgba(96, 165, 250, 0.3)',
-              transition: 'background-color 0.3s'
-            }}
-          />
-        ))}
+        </Box>
+        <Box sx={{ 
+          display: 'flex', 
+          justifyContent: 'center', 
+          gap: 0.5,
+          mt: 1
+        }}>
+          {news.map((_, index) => (
+            <Box
+              key={index}
+              sx={{
+                width: '4px',
+                height: '4px',
+                borderRadius: '50%',
+                bgcolor: index === currentIndex ? '#60a5fa' : 'rgba(96, 165, 250, 0.3)',
+                transition: 'background-color 0.3s'
+              }}
+            />
+          ))}
+        </Box>
       </Box>
     </Box>
   );
