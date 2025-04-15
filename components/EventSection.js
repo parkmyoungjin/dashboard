@@ -69,7 +69,15 @@ export default function EventSection() {
 
   return (
     <Box sx={{ bgcolor: '#1B2028', p: 3, borderRadius: 2, boxShadow: 1 }}>
-      <Typography variant="h5" fontWeight="bold" mb={3} sx={{ color: '#fff' }}>
+      <Typography 
+        variant="h6" 
+        sx={{ 
+          mb: 1,
+          fontWeight: 600,
+          fontSize: '0.9rem',
+          color: 'text.primary'
+        }}
+      >
         주요 이벤트
       </Typography>
       <Grid container spacing={2}>

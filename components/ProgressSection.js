@@ -60,24 +60,117 @@ export default function ProgressSection() {
 
   if (loading) {
     return (
-      <Box sx={{ p: 2, textAlign: 'center' }}>
-        <Typography>데이터를 불러오는 중입니다...</Typography>
+      <Box sx={{ 
+        height: '192px',
+        width: '100%',
+        bgcolor: '#1e293b',
+        borderRadius: 1,
+        p: '12px 16px',
+        display: 'flex',
+        flexDirection: 'column',
+      }}>
+        <Typography 
+          variant="h6" 
+          sx={{ 
+            fontWeight: 600,
+            fontSize: '0.9rem',
+            color: '#fff',
+            mb: 1,
+            flexShrink: 0,
+          }}
+        >
+          현재 진행중인 사업 현황
+        </Typography>
+
+        <Box sx={{ 
+          flex: 1,
+          bgcolor: '#0f172a',
+          borderRadius: 2,
+          p: '12px 16px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          <Typography sx={{ color: '#94a3b8' }}>데이터를 불러오는 중입니다...</Typography>
+        </Box>
       </Box>
     );
   }
 
   if (error) {
     return (
-      <Box sx={{ p: 2, textAlign: 'center', color: 'error.main' }}>
-        <Typography>데이터를 불러오는데 실패했습니다: {error}</Typography>
+      <Box sx={{ 
+        height: '192px',
+        width: '100%',
+        bgcolor: '#1e293b',
+        borderRadius: 1,
+        p: '12px 16px',
+        display: 'flex',
+        flexDirection: 'column',
+      }}>
+        <Typography 
+          variant="h6" 
+          sx={{ 
+            fontWeight: 600,
+            fontSize: '0.9rem',
+            color: '#fff',
+            mb: 1,
+            flexShrink: 0,
+          }}
+        >
+          현재 진행중인 사업 현황
+        </Typography>
+
+        <Box sx={{ 
+          flex: 1,
+          bgcolor: '#0f172a',
+          borderRadius: 2,
+          p: '12px 16px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          <Typography sx={{ color: '#ef4444' }}>데이터를 불러오는데 실패했습니다: {error}</Typography>
+        </Box>
       </Box>
     );
   }
 
   if (projects.length === 0) {
     return (
-      <Box sx={{ p: 2, textAlign: 'center' }}>
-        <Typography>구글 시트에서 진행중인 사업 데이터를 찾을 수 없습니다.</Typography>
+      <Box sx={{ 
+        height: '192px',
+        width: '100%',
+        bgcolor: '#1e293b',
+        borderRadius: 1,
+        p: '12px 16px',
+        display: 'flex',
+        flexDirection: 'column',
+      }}>
+        <Typography 
+          variant="h6" 
+          sx={{ 
+            fontWeight: 600,
+            fontSize: '0.9rem',
+            color: '#fff',
+            mb: 1,
+            flexShrink: 0,
+          }}
+        >
+          현재 진행중인 사업 현황
+        </Typography>
+
+        <Box sx={{ 
+          flex: 1,
+          bgcolor: '#0f172a',
+          borderRadius: 2,
+          p: '12px 16px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          <Typography sx={{ color: '#94a3b8' }}>구글 시트에서 진행중인 사업 데이터를 찾을 수 없습니다.</Typography>
+        </Box>
       </Box>
     );
   }
@@ -85,97 +178,121 @@ export default function ProgressSection() {
   const currentProject = projects[currentIndex];
 
   return (
-    <Box>
+    <Box sx={{ 
+      height: '192px',
+      width: '100%',
+      bgcolor: '#1e293b',
+      borderRadius: 1,
+      p: '12px',
+      display: 'flex',
+      flexDirection: 'column',
+    }}>
       <Typography 
         variant="h6" 
         sx={{ 
-          mb: 2,
           fontWeight: 600,
           fontSize: '0.9rem',
-          color: 'text.primary',
+          color: '#fff',
+          mb: 1,
+          flexShrink: 0,
         }}
       >
         현재 진행중인 사업 현황
       </Typography>
 
-      <Fade in={show} timeout={500}>
-        <Box>
+      <Box sx={{ 
+        flex: 1,
+        bgcolor: '#0f172a',
+        borderRadius: 2,
+        p: '12px',
+        display: 'flex',
+        flexDirection: 'column',
+      }}>
+        <Fade in={show} timeout={500}>
           <Box sx={{ 
+            flex: 1, 
             display: 'flex', 
-            justifyContent: 'space-between', 
-            alignItems: 'center',
-            mb: 1 
+            flexDirection: 'column', 
+            justifyContent: 'space-between',
+            overflow: 'hidden'
           }}>
-            <Typography 
-              variant="h5" 
-              sx={{ 
-                fontWeight: 600,
-                fontSize: '1.1rem',
-                color: 'primary.main'
-              }}
-            >
-              {currentProject.name}
-            </Typography>
-            <Chip 
-              label="진행중" 
-              size="small" 
-              sx={{ 
-                bgcolor: 'success.main',
-                color: '#ffffff',
-                fontWeight: 'bold',
-                '& .MuiChip-label': {
-                  color: '#ffffff'
-                }
-              }} 
-            />
-          </Box>
+            <Box>
+              <Box sx={{ 
+                display: 'flex', 
+                justifyContent: 'space-between', 
+                alignItems: 'center',
+                mb: 1 
+              }}>
+                <Typography 
+                  variant="h5" 
+                  sx={{ 
+                    fontWeight: 600,
+                    fontSize: '1.3rem',
+                    color: '#60a5fa'
+                  }}
+                >
+                  {currentProject.name}
+                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                  <Typography 
+                    variant="body2" 
+                    sx={{ 
+                      color: '#94a3b8',
+                      fontSize: '0.9rem',
+                    }}
+                  >
+                    사업기간: {currentProject.period}
+                  </Typography>
+                  <Chip 
+                    label="진행중" 
+                    size="small" 
+                    sx={{ 
+                      bgcolor: '#059669',
+                      color: '#ffffff',
+                      fontWeight: 'bold',
+                      '& .MuiChip-label': {
+                        color: '#ffffff'
+                      }
+                    }} 
+                  />
+                </Box>
+              </Box>
 
-          <Typography 
-            variant="body1" 
-            sx={{ 
-              mb: 2,
-              color: 'text.secondary',
-              fontSize: '0.9rem',
-              lineHeight: 1.5
-            }}
-          >
-            {currentProject.overview}
-          </Typography>
-
-          <Typography 
-            variant="body2" 
-            sx={{ 
-              color: 'text.secondary',
-              fontSize: '0.8rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 0.5
-            }}
-          >
-            사업기간: {currentProject.period}
-          </Typography>
-
-          <Box sx={{ 
-            display: 'flex', 
-            justifyContent: 'center', 
-            mt: 2,
-            gap: 1 
-          }}>
-            {projects.map((_, index) => (
-              <Box
-                key={index}
-                sx={{
-                  width: 8,
-                  height: 8,
-                  borderRadius: '50%',
-                  bgcolor: index === currentIndex ? 'primary.main' : 'grey.300',
-                  transition: 'background-color 0.3s'
+              <Typography 
+                variant="body1" 
+                sx={{ 
+                  color: '#94a3b8',
+                  fontSize: '1.1rem',
+                  lineHeight: 1.5
                 }}
-              />
-            ))}
+              >
+                {currentProject.overview}
+              </Typography>
+            </Box>
+
+            <Box sx={{ 
+              display: 'flex', 
+              justifyContent: 'center',
+              gap: 1,
+              mt: 'auto',
+              pt: 1
+            }}>
+              {projects.map((_, index) => (
+                <Box
+                  key={index}
+                  sx={{
+                    width: 8,
+                    height: 8,
+                    borderRadius: '50%',
+                    bgcolor: index === currentIndex ? '#60a5fa' : 'rgba(96, 165, 250, 0.2)',
+                    transition: 'background-color 0.3s'
+                  }}
+                />
+              ))}
+            </Box>
           </Box>
-        </Box>
-      </Fade>
+        </Fade>
+      </Box>
     </Box>
   );
 } 

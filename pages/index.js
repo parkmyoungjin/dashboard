@@ -91,37 +91,45 @@ export default function Dashboard() {
 
         <Grid container spacing={4}>
           <Grid item xs={12} container spacing={3}>
-            <Grid item xs={12} md={3}>
-              <CurrentStatusSection />
-            </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={4} sx={{ 
+              display: 'flex', 
+              justifyContent: 'center',
+              alignItems: 'flex-start'
+            }}>
               <ProgressSection />
             </Grid>
-            <Grid item xs={12} md={3}>
-              <NewsSection news={[
-                { title: "첫 번째 이슈 제목입니다.", date: "2024-04-08" },
-                { title: "두 번째 이슈 제목입니다.", date: "2024-04-08" },
-                { title: "세 번째 이슈 제목입니다.", date: "2024-04-08" }
-              ]} />
+            <Grid item xs={12} md={4}>
+              <Paper sx={{ p: 2 }}>
+                <CurrentStatusSection />
+              </Paper>
             </Grid>
-          </Grid>
+            <Grid item xs={12} md={4}>
+              <Paper sx={{ p: 2 }}>
+                <NewsSection news={[
+                  { title: '첫 번째 이슈 제목입니다.', date: '2024-04-08' },
+                  { title: '두 번째 이슈 제목입니다.', date: '2024-04-08' },
+                  { title: '세 번째 이슈 제목입니다.', date: '2024-04-08' }
+                ]} />
+              </Paper>
+            </Grid>
 
-          <Grid item xs={12}>
-            <Paper sx={{ p: 3 }}>
-              <TimelineSection />
-            </Paper>
-          </Grid>
+            <Grid item xs={12}>
+              <Paper sx={{ p: 3 }}>
+                <TimelineSection />
+              </Paper>
+            </Grid>
 
-          <Grid item xs={12} md={6}>
-            <Paper sx={{ p: 3 }}>
-              <FuturePlanSection />
-            </Paper>
-          </Grid>
+            <Grid item xs={12} md={6}>
+              <Paper sx={{ p: 3 }}>
+                <FuturePlanSection />
+              </Paper>
+            </Grid>
 
-          <Grid item xs={12} md={6}>
-            <Paper sx={{ p: 3 }}>
-              <EventSection />
-            </Paper>
+            <Grid item xs={12} md={6}>
+              <Paper sx={{ p: 3 }}>
+                <EventSection />
+              </Paper>
+            </Grid>
           </Grid>
         </Grid>
       </DashboardContainer>

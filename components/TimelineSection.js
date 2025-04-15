@@ -69,6 +69,26 @@ export default function TimelineSection() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // 파스텔 색상 생성 함수
+  const getProjectColor = (index) => {
+    // 미리 정의된 파스텔 색상 배열
+    const colors = [
+      'hsla(210, 70%, 80%, 0.9)', // 파스텔 블루
+      'hsla(340, 70%, 80%, 0.9)', // 파스텔 핑크
+      'hsla(160, 70%, 80%, 0.9)', // 파스텔 그린
+      'hsla(45, 70%, 80%, 0.9)',  // 파스텔 옐로우
+      'hsla(280, 70%, 80%, 0.9)', // 파스텔 퍼플
+      'hsla(20, 70%, 80%, 0.9)',  // 파스텔 오렌지
+      'hsla(180, 70%, 80%, 0.9)', // 파스텔 터콰이즈
+      'hsla(120, 70%, 80%, 0.9)', // 파스텔 라임
+      'hsla(300, 70%, 80%, 0.9)', // 파스텔 마젠타
+      'hsla(60, 70%, 80%, 0.9)',  // 파스텔 레몬
+    ];
+    
+    // 인덱스에 따라 색상 순환
+    return colors[index % colors.length];
+  };
+
   useEffect(() => {
     const fetchTimelineData = async () => {
       try {
@@ -83,14 +103,14 @@ export default function TimelineSection() {
         }
 
         // 헤더를 제외한 데이터 행을 처리
-        const formattedProjects = data.slice(1).map(row => ({
+        const formattedProjects = data.slice(1).map((row, index) => ({
           name: row[0] || '',
           description: row[1] || '',
           duration: { 
             start: parseInt(row[2]) || 1, 
             end: parseInt(row[3]) || 12 
           },
-          color: getRandomPastelColor(),
+          color: getProjectColor(index),
         }));
         
         setProjects(formattedProjects);
@@ -105,12 +125,6 @@ export default function TimelineSection() {
 
     fetchTimelineData();
   }, []);
-
-  // 파스텔 색상 생성 함수
-  const getRandomPastelColor = () => {
-    const hue = Math.floor(Math.random() * 360);
-    return `hsla(${hue}, 70%, 80%, 0.9)`;
-  };
 
   const months = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
   const currentMonth = new Date().getMonth() + 1;
@@ -166,7 +180,7 @@ export default function TimelineSection() {
           color: 'text.primary',
         }}
       >
-        지역완결형 글로벌허브 메디컬센터 사업 추진 현황
+        신사업추진팀 타임라인
       </Typography>
 
       <Box sx={{ position: 'relative' }}>
@@ -204,7 +218,7 @@ export default function TimelineSection() {
                           overflow: 'hidden',
                           textOverflow: 'ellipsis',
                           fontWeight: 600,
-                          fontSize: '0.65rem',
+                          fontSize: '0.85rem',
                         }}
                       >
                         {project.name}
