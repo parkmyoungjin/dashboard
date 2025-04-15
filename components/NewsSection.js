@@ -148,11 +148,21 @@ export default function NewsSection() {
       </Typography>
       <Card sx={{ 
         flex: 1,
-        bgcolor: '#232B38',
+        bgcolor: '#1B2028',
+        borderRadius: 2,
+        p: 2,
+        height: '100%',
         display: 'flex',
         flexDirection: 'column'
       }}>
-        <CardContent sx={{ flex: 1, py: 1, px: 2, '&:last-child': { pb: 1 } }}>
+        <CardContent sx={{ 
+          flex: 1, 
+          py: 0.5, 
+          px: 2, 
+          '&:last-child': { 
+            pb: 1 
+          } 
+        }}>
           <Typography 
             variant="caption" 
             sx={{ 

@@ -65,13 +65,11 @@ const StatusIcon = ({ icon: Icon, label, isActive }) => {
 export default function CurrentStatusSection() {
   return (
     <Box sx={{ 
-      height: '160px',
-      display: 'flex', 
-      flexDirection: 'column',
       width: '100%',
       maxWidth: '800px',
       margin: '0 auto',
-      px: 2
+      px: 2,
+      pb: 1.5
     }}>
       <Typography 
         variant="h6" 
@@ -79,28 +77,37 @@ export default function CurrentStatusSection() {
           fontWeight: 600,
           fontSize: '0.9rem',
           color: 'text.primary',
-          mb: 4,
+          mb: 2,
           textAlign: 'left'
         }}
       >
         지역완결형 글로벌허브 메디컬센터 사업 진행률
       </Typography>
 
-      <Box sx={{ 
-        display: 'flex', 
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-        gap: 2,
-        mt: 1,
-        width: '100%'
+      <Box sx={{
+        bgcolor: '#1B2028',
+        borderRadius: 2,
+        pt: 2,
+        px: 2,
+        pb: 1.5,
+        display: 'flex',
+        alignItems: 'center',
       }}>
-        <StatusIcon icon={DescriptionIcon} label="진행중" isActive={true} />
-        <ArrowIcon />
-        <StatusIcon icon={ArchitectureIcon} isActive={false} />
-        <ArrowIcon />
-        <StatusIcon icon={ApartmentIcon} isActive={false} />
-        <ArrowIcon />
-        <StatusIcon icon={DomainVerificationIcon} isActive={false} />
+        <Box sx={{ 
+          display: 'flex', 
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 2,
+          width: '100%'
+        }}>
+          <StatusIcon icon={DescriptionIcon} label="진행중" isActive={true} />
+          <ArrowIcon />
+          <StatusIcon icon={ArchitectureIcon} isActive={false} />
+          <ArrowIcon />
+          <StatusIcon icon={ApartmentIcon} isActive={false} />
+          <ArrowIcon />
+          <StatusIcon icon={DomainVerificationIcon} isActive={false} />
+        </Box>
       </Box>
     </Box>
   );

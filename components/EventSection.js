@@ -68,7 +68,7 @@ export default function EventSection() {
   }
 
   return (
-    <Box sx={{ bgcolor: '#1B2028', p: 3, borderRadius: 2, boxShadow: 1 }}>
+    <Box sx={{ bgcolor: '#1B2028', p: 3, borderRadius: 2, boxShadow: 1, height: '192px' }}>
       <Typography 
         variant="h6" 
         sx={{ 
@@ -84,9 +84,9 @@ export default function EventSection() {
         {displayEvents.map((event, index) => (
           <Grid item xs={4} key={index}>
             <Card sx={{ height: '100%', bgcolor: '#232B38' }}>
-              <CardContent>
+              <CardContent sx={{ py: 1.5, px: 2, '&:last-child': { pb: 1.5 } }}>
                 <Typography variant="subtitle1" sx={{
-                  mb: 1,
+                  mb: 0.75,
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   whiteSpace: 'nowrap',
@@ -95,7 +95,7 @@ export default function EventSection() {
                   {event.title}
                 </Typography>
                 <Typography variant="body2" sx={{
-                  mb: 1,
+                  mb: 0.75,
                   overflow: 'hidden',
                   display: '-webkit-box',
                   WebkitLineClamp: 2,
