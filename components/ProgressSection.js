@@ -1,12 +1,12 @@
 import { Box, Typography, Paper, Fade, Chip, CircularProgress } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { useSheetData } from '../contexts/SheetDataContext';
 
 export default function ProgressSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [show, setShow] = useState(true);
+  const { data, loading, error } = useSheetData();
   const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   // 날짜 형식 처리 함수
   const parseDate = (dateStr, isEndDate = false) => {
@@ -52,69 +52,45 @@ export default function ProgressSection() {
     return Math.round((current / total) * 100);
   };
 
+  // 데이터 변환 처리
   useEffect(() => {
-    // 구글 시트에서 데이터 가져오기
-    const fetchProjects = async () => {
-      try {
-        const response = await fetch('/api/sheets?sheet=ProgressSection');
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        
-        if (!Array.isArray(data) || data.length <= 1) {
-          throw new Error('데이터 형식이 올바르지 않습니다.');
-        }
+    if (!data || data.length <= 1) return;
 
-        // 헤더를 제외한 데이터 행을 처리
-        const formattedProjects = data.slice(1).map(row => ({
-          name: row[0] || '',
-          overview: row[1] || '',
-          startDate: row[2] || '',
-          endDate: row[3] || '',
-          period: row[2] && row[3] ? `${row[2]} ~ ${row[3]}` : '',
-          status: row[4] || '진행중'
-        }));
-        
-        setProjects(formattedProjects);
-        setError(null);
-      } catch (error) {
-        console.error('Error fetching project data:', error);
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+    // 헤더를 제외한 데이터 행을 처리
+    const formattedProjects = data.slice(1).map(row => ({
+      name: row[0] || '',
+      overview: row[1] || '',
+      startDate: row[2] || '',
+      endDate: row[3] || '',
+      period: row[2] && row[3] ? `${row[2]} ~ ${row[3]}` : '',
+      status: row[4] || '진행중'
+    }));
+    
+    setProjects(formattedProjects);
+  }, [data]);
 
-    fetchProjects();
-  }, []);
-
+  // 프로젝트 순환 표시 (3초 간격으로 변경)
   useEffect(() => {
-    if (projects.length === 0) return;
+    if (!projects || projects.length <= 1) return;
 
-    // 5초마다 다음 프로젝트로 전환
     const interval = setInterval(() => {
       setShow(false);
       setTimeout(() => {
-        setCurrentIndex((prevIndex) => {
-          const newIndex = (prevIndex + 1) % projects.length;
-          // 커스텀 이벤트를 발생시켜 TimelineSection에 알림
-          window.dispatchEvent(new CustomEvent('progressProjectChange', {
-            detail: { currentIndex: newIndex }
-          }));
-          return newIndex;
-        });
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % projects.length);
         setShow(true);
       }, 500);
-    }, 5000);
-
-    // 초기 로드 시에도 현재 인덱스 전달
-    window.dispatchEvent(new CustomEvent('progressProjectChange', {
-      detail: { currentIndex: currentIndex }
-    }));
+    }, 3000); // 3초로 변경
 
     return () => clearInterval(interval);
   }, [projects]);
+
+  // 프로젝트 변경 이벤트 발생
+  useEffect(() => {
+    const event = new CustomEvent('progressProjectChange', {
+      detail: { currentIndex }
+    });
+    window.dispatchEvent(event);
+  }, [currentIndex]);
 
   if (loading) {
     return (

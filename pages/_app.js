@@ -1,5 +1,6 @@
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import { SheetDataProvider } from '../contexts/SheetDataContext';
 
 const theme = createTheme({
   palette: {
@@ -101,11 +102,13 @@ const theme = createTheme({
   },
 });
 
-export default function MyApp({ Component, pageProps }) {
+export default function App({ Component, pageProps }) {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Component {...pageProps} />
+      <SheetDataProvider>
+        <Component {...pageProps} />
+      </SheetDataProvider>
     </ThemeProvider>
   );
 } 

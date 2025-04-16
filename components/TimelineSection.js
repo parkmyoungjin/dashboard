@@ -1,6 +1,7 @@
 import { Box, Typography, Grid, Tooltip } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useState, useEffect } from 'react';
+import { useSheetData } from '../contexts/SheetDataContext';
 
 const TimelineBar = styled(Box)(({ theme }) => ({
   position: 'relative',
@@ -82,10 +83,9 @@ const CurrentDateLine = styled(Box)(({ theme, left }) => ({
 }));
 
 export default function TimelineSection() {
-  const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [highlightedProject, setHighlightedProject] = useState(null);
+  const { data, loading, error } = useSheetData();
+  const [projects, setProjects] = useState([]);
 
   // 파스텔 색상 생성 함수
   const getProjectColor = (index) => {
@@ -106,54 +106,34 @@ export default function TimelineSection() {
     return colors[index % colors.length];
   };
 
+  // 데이터 변환 처리
   useEffect(() => {
-    const fetchTimelineData = async () => {
-      try {
-        const response = await fetch('/api/sheets?sheet=ProgressSection');
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        
-        if (!Array.isArray(data) || data.length <= 1) {
-          throw new Error('데이터 형식이 올바르지 않습니다.');
-        }
+    if (!data || data.length <= 1) return;
 
-        // 헤더를 제외한 데이터 행을 처리
-        const formattedProjects = data.slice(1).map((row, index) => ({
-          id: index,  // 프로젝트 식별을 위한 id 추가
-          name: row[0] || '',
-          description: row[1] || '',
-          duration: { 
-            start: parseInt(row[2].split('-')[1]) || 1,
-            end: parseInt(row[3].split('-')[1]) || 12
-          },
-          color: getProjectColor(index),
-        }));
-        
-        setProjects(formattedProjects);
-        setError(null);
-      } catch (error) {
-        console.error('Error fetching timeline data:', error);
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+    // 헤더를 제외한 데이터 행을 처리
+    const formattedProjects = data.slice(1).map((row, index) => ({
+      id: index,
+      name: row[0] || '',
+      description: row[1] || '',
+      duration: { 
+        start: parseInt(row[2]?.split('-')[1]) || 1,
+        end: parseInt(row[3]?.split('-')[1]) || 12
+      },
+      color: getProjectColor(index),
+    }));
+    
+    setProjects(formattedProjects);
+  }, [data]);
 
-    fetchTimelineData();
-
-    // ProgressSection의 현재 선택된 프로젝트 변경 감지
+  // ProgressSection의 현재 선택된 프로젝트 변경 감지
+  useEffect(() => {
     const handleProgressChange = (event) => {
       if (event.detail) {
         setHighlightedProject(event.detail.currentIndex);
       }
     };
 
-    // 이벤트 리스너 등록
     window.addEventListener('progressProjectChange', handleProgressChange);
-
-    // 컴포넌트 언마운트 시 이벤트 리스너 제거
     return () => {
       window.removeEventListener('progressProjectChange', handleProgressChange);
     };
@@ -364,7 +344,9 @@ export default function TimelineSection() {
                           sx={{
                             display: 'flex',
                             alignItems: 'center',
-                            width: projectGroup.length > 1 ? '45%' : '100%'
+                            width: projectGroup.length > 1 ? '45%' : '100%',
+                            justifyContent: pIndex === 1 ? 'flex-end' : 'flex-start',
+                            textAlign: pIndex === 1 ? 'right' : 'left'
                           }}
                         >
                           <Typography 
@@ -382,7 +364,8 @@ export default function TimelineSection() {
                                 ? '0 0 10px rgba(255, 255, 255, 0.5)'
                                 : '0 1px 2px rgba(0,0,0,0.2)',
                               letterSpacing: '0.2px',
-                              width: '100%'
+                              width: '100%',
+                              textAlign: 'inherit'
                             }}
                           >
                             {project.name}
