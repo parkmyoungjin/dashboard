@@ -255,16 +255,23 @@ export default function ProgressSection() {
           <Box sx={{ 
             flex: 1, 
             display: 'flex',
-            gap: 2
+            gap: 2,
+            minWidth: 0
           }}>
-            <Box sx={{ flex: 1 }}>
+            <Box sx={{ 
+              flex: 1,
+              minWidth: 0
+            }}>
               <Typography 
                 variant="h5" 
                 sx={{ 
                   fontWeight: 600,
                   fontSize: '1.3rem',
                   color: '#fff',
-                  mb: 1
+                  mb: 1,
+                  whiteSpace: 'nowrap',
+                  letterSpacing: '-1.5px',
+                  paddingRight: '8px'
                 }}
               >
                 {currentProject.name}
