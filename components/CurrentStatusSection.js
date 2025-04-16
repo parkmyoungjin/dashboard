@@ -33,14 +33,14 @@ const StatusIcon = ({ icon: Icon, label, isActive }) => {
         backgroundColor: isActive ? 'rgba(33, 150, 243, 0.1)' : 'rgba(226, 232, 240, 0.3)',
       }}>
         <Icon sx={{ 
-          fontSize: '2.4rem', 
+          fontSize: '3.12rem',
           color: isActive ? '#2196f3' : '#94a3b8'
         }} />
       </Box>
       <Typography 
         sx={{ 
           color: isActive ? '#2196f3' : '#94a3b8',
-          fontSize: '0.8rem',
+          fontSize: '1.04rem',
           mt: 1,
           fontWeight: 500
         }}
@@ -54,13 +54,15 @@ const StatusIcon = ({ icon: Icon, label, isActive }) => {
 export default function CurrentStatusSection() {
   return (
     <Box sx={{ 
-      height: '192px',
+      height: '100%',
       width: '100%',
       maxWidth: '800px',
       margin: '0 auto',
       p: 2,
       bgcolor: '#1e293b',
-      borderRadius: 1
+      borderRadius: 1,
+      display: 'flex',
+      flexDirection: 'column'
     }}>
       <Typography 
         variant="h6" 
@@ -71,10 +73,10 @@ export default function CurrentStatusSection() {
           mb: 1.5
         }}
       >
-        지역완결형 글로벌허브 메디컬센터 사업 진행률
+        Global Hub 진행 단계
       </Typography>
       <Box sx={{
-        height: 'calc(100% - 44px)',
+        height: 'calc(100% - 10px)',
         width: '100%',
         bgcolor: '#0f172a',
         borderRadius: 2,

@@ -140,7 +140,7 @@ export default function EventSection() {
           mb: 1.5
         }}
       >
-        주요 일정
+        핵심 성과
       </Typography>
       <Box sx={{
         flex: 1,
@@ -160,7 +160,7 @@ export default function EventSection() {
                 height: '100%',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                mt: 0.5
+                mt: 1
               }}>
                 <Stack direction="row" spacing={1} alignItems="center" sx={{ width: '100%' }}>
                   <Chip

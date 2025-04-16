@@ -104,7 +104,7 @@ export default function NewsSection() {
   if (loading) {
     return (
       <Box sx={{ 
-        height: '192px',
+        height: '100%',
         width: '100%',
         maxWidth: '800px',
         margin: '0 auto',
@@ -123,10 +123,13 @@ export default function NewsSection() {
             mb: 1.5
           }}
         >
-          Medical News
+          오늘의 메디컬 이슈
         </Typography>
         <Box sx={{ 
-          flex: 1,
+          height: 'calc(100% - 10px)',
+          bgcolor: '#0f172a',
+          borderRadius: 2,
+          p: 2,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center'
@@ -141,7 +144,7 @@ export default function NewsSection() {
   if (error) {
     return (
       <Box sx={{ 
-        height: '192px',
+        height: '100%',
         width: '100%',
         maxWidth: '800px',
         margin: '0 auto',
@@ -160,10 +163,13 @@ export default function NewsSection() {
             mb: 1.5
           }}
         >
-          Medical News
+          오늘의 메디컬 이슈
         </Typography>
         <Box sx={{ 
-          flex: 1,
+          height: 'calc(100% - 10px)',
+          bgcolor: '#0f172a',
+          borderRadius: 2,
+          p: 2,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center'
@@ -177,7 +183,7 @@ export default function NewsSection() {
   if (!news.length) {
     return (
       <Box sx={{ 
-        height: '192px',
+        height: '100%',
         width: '100%',
         maxWidth: '800px',
         margin: '0 auto',
@@ -196,10 +202,13 @@ export default function NewsSection() {
             mb: 1.5
           }}
         >
-          Medical News
+          오늘의 메디컬 이슈
         </Typography>
         <Box sx={{ 
-          flex: 1,
+          height: 'calc(100% - 10px)',
+          bgcolor: '#0f172a',
+          borderRadius: 2,
+          p: 2,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center'
@@ -212,7 +221,7 @@ export default function NewsSection() {
 
   return (
     <Box sx={{ 
-      height: '192px',
+      height: '100%',
       width: '100%',
       maxWidth: '800px',
       margin: '0 auto',
@@ -231,10 +240,10 @@ export default function NewsSection() {
           mb: 1.5
         }}
       >
-        Medical News
+        오늘의 메디컬 이슈
       </Typography>
       <Box sx={{ 
-        height: 'calc(100% - 44px)',
+        height: 'calc(100% - 10px)',
         width: '100%',
         bgcolor: '#0f172a',
         borderRadius: 2,
