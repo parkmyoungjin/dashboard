@@ -45,7 +45,8 @@ const PageTitle = styled(Typography)(({ theme }) => ({
   fontWeight: 700,
   marginBottom: theme.spacing(4),
   position: 'relative',
-  color: theme.palette.text.primary,
+  color: '#2DD4BF',
+  textShadow: '0 0 10px rgba(45, 212, 191, 0.3)',
   '&::after': {
     content: '""',
     position: 'absolute',
@@ -106,11 +107,11 @@ export default function Dashboard() {
             sx={{ 
               fontWeight: 600,
               fontSize: { xs: '1.2rem', sm: '1.6rem' },
-              color: '#fff',
-              textShadow: '0 0 10px rgba(255, 255, 255, 0.5)'
+              color: '#2DD4BF',
+              textShadow: '0 0 10px rgba(45, 212, 191, 0.3)'
             }}
           >
-            [PNUH] 신사업추진팀
+            신사업추진 보드
           </Typography>
         </Box>
       </Paper>

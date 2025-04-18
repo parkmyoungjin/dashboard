@@ -1,51 +1,37 @@
-import { Box, Typography, Card, CardContent, Grid, Stack, Chip } from '@mui/material';
+import { Box, Typography, Card, CardContent, Grid, Stack, Chip, Fade } from '@mui/material';
 import { useState, useEffect } from 'react';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import { useSheetData } from '../hooks/useSheetData';
 
 export default function EventSection() {
-  const [events, setEvents] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [show, setShow] = useState(true);
+  const { data, loading, error } = useSheetData('EventSection');
+  const [events, setEvents] = useState([]);
 
+  // 데이터 변환 처리
   useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const response = await fetch('/api/sheets?sheet=EventSection');
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        
-        if (!Array.isArray(data) || data.length <= 1) {
-          throw new Error('데이터 형식이 올바르지 않습니다.');
-        }
+    if (!data || data.length <= 1) return;
 
-        // 헤더를 제외한 데이터 행을 처리
-        const formattedEvents = data.slice(1).map(row => ({
-          date: row[0] || '',
-          title: row[1] || '',
-          description: row[2] || '',
-          status: row[3] || '예정'
-        }));
-        
-        setEvents(formattedEvents);
-        setError(null);
-      } catch (error) {
-        console.error('Error fetching events data:', error);
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchEvents();
-  }, []);
+    // 헤더를 제외한 데이터 행을 처리
+    const formattedEvents = data.slice(1).map(row => ({
+      date: row[0] || '',
+      title: row[1] || '',
+      description: row[2] || '',
+      status: row[3] || '예정'
+    }));
+    
+    setEvents(formattedEvents);
+  }, [data]);
 
   useEffect(() => {
     if (!events || events.length <= 1) return;
     const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) >= events.length ? 0 : prevIndex + 1);
+      setShow(false);
+      setTimeout(() => {
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % events.length);
+        setShow(true);
+      }, 500);
     }, 10000);
     return () => clearInterval(interval);
   }, [events]);
@@ -60,7 +46,7 @@ export default function EventSection() {
         maxWidth: '800px',
         margin: '0 auto',
         p: 2,
-        bgcolor: '#1e293b',
+        bgcolor: '#0F2942',
         borderRadius: 1,
         display: 'flex',
         flexDirection: 'column'
@@ -96,7 +82,7 @@ export default function EventSection() {
         maxWidth: '800px',
         margin: '0 auto',
         p: 2,
-        bgcolor: '#1e293b',
+        bgcolor: '#0F2942',
         borderRadius: 1,
         display: 'flex',
         flexDirection: 'column'
@@ -131,21 +117,118 @@ export default function EventSection() {
       display: 'flex',
       flexDirection: 'column',
     }}>
-      <Typography 
-        variant="h6" 
-        sx={{ 
-          fontWeight: 600,
-          fontSize: '1rem',
-          color: '#fff',
-          mb: 1.5
-        }}
-      >
-        핵심 성과
-      </Typography>
+      <Box sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'flex-end',
+        mb: 0
+      }}>
+        <Typography 
+          variant="h6" 
+          sx={{ 
+            fontWeight: 600,
+            fontSize: '1rem',
+            color: '#fff',
+            mb: 0.5
+          }}
+        >
+          핵심 성과
+        </Typography>
+        {events.length > 1 && (
+          <Box sx={{ 
+            display: 'flex',
+            gap: 0.5,
+            pr: 1
+          }}>
+            {Array.from({ length: events.length }).map((_, idx) => (
+              <Box
+                key={idx}
+                onClick={() => setCurrentIndex(idx)}
+                sx={{
+                  position: 'relative',
+                  minWidth: '160px',
+                  height: '32px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  bgcolor: currentIndex === idx ? '#0B1929' : '#0F2942',
+                  color: currentIndex === idx ? '#2DD4BF' : '#94a3b8',
+                  borderRadius: '8px 8px 0 0',
+                  cursor: 'pointer',
+                  fontSize: '0.875rem',
+                  fontWeight: currentIndex === idx ? 600 : 500,
+                  transition: 'all 0.2s ease-in-out',
+                  zIndex: currentIndex === idx ? 10 : events.length - idx,
+                  '&:hover': {
+                    bgcolor: currentIndex === idx ? '#0B1929' : '#0F2942',
+                  },
+                  '&::before, &::after': {
+                    content: '""',
+                    position: 'absolute',
+                    width: '8px',
+                    height: '8px',
+                    bottom: 0,
+                    bgcolor: 'transparent',
+                    transition: 'all 0.2s ease-in-out'
+                  },
+                  '&::before': {
+                    left: '-8px',
+                    background: `radial-gradient(circle at 0 0,
+                      transparent 8px,
+                      ${currentIndex === idx ? '#0B1929' : '#0F2942'} 0)`
+                  },
+                  '&::after': {
+                    right: '-8px',
+                    background: `radial-gradient(circle at 8px 0,
+                      transparent 8px,
+                      ${currentIndex === idx ? '#0B1929' : '#0F2942'} 0)`
+                  }
+                }}
+              >
+                <Box sx={{ 
+                  position: 'relative',
+                  zIndex: 1,
+                  height: '100%',
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  px: 1,
+                  overflow: 'hidden'
+                }}>
+                  <Stack
+                    direction="row"
+                    spacing={0.5}
+                    alignItems="center"
+                    sx={{
+                      width: '100%',
+                      justifyContent: 'center'
+                    }}
+                  >
+                    <CalendarTodayIcon sx={{ fontSize: '0.9rem' }} />
+                    <Typography
+                      noWrap
+                      sx={{
+                        fontSize: '0.875rem',
+                        textAlign: 'center',
+                        letterSpacing: events[idx]?.title?.length > 12 ? '-0.05em' : 'normal',
+                        flex: 1,
+                        maxWidth: '85%'
+                      }}
+                    >
+                      {events[idx]?.title || ''}
+                    </Typography>
+                  </Stack>
+                </Box>
+              </Box>
+            ))}
+          </Box>
+        )}
+      </Box>
       <Box sx={{
         flex: 1,
         width: '100%',
-        bgcolor: '#0f172a',
+        bgcolor: '#0B1929',
         borderRadius: 1,
         p: 1.5,
         display: 'flex',
@@ -154,13 +237,16 @@ export default function EventSection() {
       }}>
         <Box sx={{ flex: 1 }}>
           {currentEvent && (
-            <>
+            <Fade in={show} timeout={500}>
               <Box sx={{ 
                 display: 'flex', 
                 height: '100%',
-                alignItems: 'center',
+                alignItems: 'flex-start',
                 justifyContent: 'space-between',
-                mt: 1
+                backgroundColor: 'background.default',
+                borderRadius: 1,
+                px: 2,
+                py: 1.75
               }}>
                 <Stack direction="row" spacing={1} alignItems="center" sx={{ width: '100%' }}>
                   <Chip
@@ -201,32 +287,9 @@ export default function EventSection() {
                   />
                 </Stack>
               </Box>
-            </>
+            </Fade>
           )}
         </Box>
-        {events.length > 1 && (
-          <Box sx={{ 
-            display: 'flex', 
-            justifyContent: 'center', 
-            gap: 0.5,
-            mt: 1
-          }}>
-            {Array.from({ length: events.length }).map((_, idx) => (
-              <Box
-                key={idx}
-                onClick={() => setCurrentIndex(idx)}
-                sx={{
-                  width: '4px',
-                  height: '4px',
-                  borderRadius: '50%',
-                  bgcolor: currentIndex === idx ? '#60a5fa' : 'rgba(96, 165, 250, 0.3)',
-                  transition: 'background-color 0.3s',
-                  cursor: 'pointer'
-                }}
-              />
-            ))}
-          </Box>
-        )}
       </Box>
     </Box>
   );

@@ -78,7 +78,7 @@ const CurrentDateLine = styled(Box)(({ theme, left }) => ({
   width: 2,
   height: '100%',
   top: 0,
-  background: 'linear-gradient(180deg, #60a5fa 0%, rgba(96, 165, 250, 0.2) 100%)',
+  background: 'linear-gradient(180deg, #2DD4BF 0%, rgba(45, 212, 191, 0.2) 100%)',
   zIndex: 2
 }));
 
@@ -87,22 +87,50 @@ export default function TimelineSection() {
   const { data, loading, error } = useSheetData();
   const [projects, setProjects] = useState([]);
 
+  // 날짜 형식 처리 함수
+  const parseDate = (dateStr, isEndDate = false) => {
+    if (!dateStr) return null;
+    
+    // YYYY-MM 형식 체크
+    if (/^\d{4}-\d{2}$/.test(dateStr)) {
+      const [year, month] = dateStr.split('-').map(Number);
+      if (isEndDate) {
+        // month는 0-based이므로 현재 달의 마지막 날을 구하기 위해 다음 달의 0일을 구함
+        return new Date(Date.UTC(year, month, 0));
+      }
+      return new Date(Date.UTC(year, month - 1, 1));
+    }
+    // YYYY-MM-DD 형식 체크
+    else if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+      const [year, month, day] = dateStr.split('-').map(Number);
+      return new Date(Date.UTC(year, month - 1, day));
+    }
+    return null;
+  };
+
+  // 날짜를 타임라인 위치값으로 변환하는 함수
+  const getDatePosition = (date) => {
+    if (!date) return 0;
+    const startOfYear = new Date(date.getFullYear(), 0, 1);
+    const daysInYear = 365; // 윤년은 고려하지 않음
+    const dayOfYear = Math.floor((date - startOfYear) / (24 * 60 * 60 * 1000));
+    return (dayOfYear / daysInYear) * 100;
+  };
+
   // 파스텔 색상 생성 함수
   const getProjectColor = (index) => {
-    // 대시보드 테마와 어울리는 색상 배열
     const colors = [
-      'hsla(217, 91%, 60%, 0.8)',  // 밝은 파란색 (#60a5fa)
-      'hsla(199, 89%, 48%, 0.8)',  // 하늘색 (#0ea5e9)
-      'hsla(186, 91%, 36%, 0.8)',  // 청록색 (#0d9488)
-      'hsla(231, 91%, 60%, 0.8)',  // 인디고 (#6366f1)
-      'hsla(262, 83%, 58%, 0.8)',  // 보라색 (#7c3aed)
-      'hsla(291, 91%, 65%, 0.8)',  // 자주색 (#d946ef)
-      'hsla(334, 86%, 46%, 0.8)',  // 분홍색 (#db2777)
-      'hsla(245, 58%, 51%, 0.8)',  // 남색 (#4f46e5)
-      'hsla(199, 89%, 48%, 0.8)',  // 하늘색 (#0ea5e9)
-      'hsla(217, 91%, 60%, 0.8)',  // 밝은 파란색 (#60a5fa)
+      'hsla(169, 80%, 50%, 0.8)',  // 민트/터콰이즈 (#2DD4BF)
+      'hsla(173, 80%, 45%, 0.8)',  // 약간 어두운 터콰이즈
+      'hsla(166, 84%, 40%, 0.8)',  // 더 어두운 터콰이즈 (#14B8A6)
+      'hsla(180, 85%, 50%, 0.8)',  // 밝은 청록색
+      'hsla(155, 75%, 45%, 0.8)',  // 초록빛 민트
+      'hsla(187, 85%, 55%, 0.8)',  // 밝은 하늘색
+      'hsla(176, 90%, 35%, 0.8)',  // 진한 터콰이즈
+      'hsla(162, 80%, 45%, 0.8)',  // 초록빛 터콰이즈
+      'hsla(182, 85%, 55%, 0.8)',  // 하늘빛 터콰이즈
+      'hsla(169, 80%, 50%, 0.8)',  // 민트/터콰이즈 (#2DD4BF)
     ];
-    
     return colors[index % colors.length];
   };
 
@@ -111,16 +139,21 @@ export default function TimelineSection() {
     if (!data || data.length <= 1) return;
 
     // 헤더를 제외한 데이터 행을 처리
-    const formattedProjects = data.slice(1).map((row, index) => ({
-      id: index,
-      name: row[0] || '',
-      description: row[1] || '',
-      duration: { 
-        start: parseInt(row[2]?.split('-')[1]) || 1,
-        end: parseInt(row[3]?.split('-')[1]) || 12
-      },
-      color: getProjectColor(index),
-    }));
+    const formattedProjects = data.slice(1).map((row, index) => {
+      const startDate = parseDate(row[2], false);
+      const endDate = parseDate(row[3], true);
+      
+      return {
+        id: index,
+        name: row[0] || '',
+        description: row[1] || '',
+        duration: { 
+          start: startDate ? getDatePosition(startDate) : 0,
+          end: endDate ? getDatePosition(endDate) : 100
+        },
+        color: getProjectColor(index),
+      };
+    });
     
     setProjects(formattedProjects);
   }, [data]);
@@ -227,19 +260,16 @@ export default function TimelineSection() {
 
   // ProjectBar 스타일 수정
   const getProjectStyle = (projectGroup, rowIndex, index) => {
-    const isHighlighted = projectGroup.some(p => p.id === highlightedProject);
     return {
-      left: `calc(${(projectGroup[0].duration.start - 1) * 8.33}% + 2px)`,
-      width: `calc(${(projectGroup[0].duration.end - projectGroup[0].duration.start + 1) * 8.33}% - 4px)`,
+      left: `calc(${projectGroup[0].duration.start}% + 2px)`,
+      width: `calc(${projectGroup[0].duration.end - projectGroup[0].duration.start}% - 4px)`,
       background: (theme) => 
         `linear-gradient(90deg, 
-          ${isHighlighted ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.1)'} 0%, 
+          rgba(255,255,255,0.1) 0%, 
           ${projectGroup[0].color} 100%)`,
-      boxShadow: isHighlighted 
-        ? '0 0 15px rgba(96, 165, 250, 0.5)'
-        : '0 1px 2px rgba(0,0,0,0.1)',
-      zIndex: isHighlighted ? 2 : 1,
-      transform: isHighlighted ? 'scale(1.05)' : 'none',
+      boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
+      zIndex: 1,
+      transform: 'none',
     };
   };
 
@@ -266,35 +296,11 @@ export default function TimelineSection() {
         >
           타임라인
         </Typography>
-        <Box sx={{ display: 'flex', gap: 1 }}>
-          <Box sx={{
-            bgcolor: '#0f172a',
-            color: '#60a5fa',
-            px: 2,
-            py: 0.5,
-            borderRadius: '100px',
-            fontSize: '0.875rem',
-            fontWeight: 500
-          }}>
-            완료
-          </Box>
-          <Box sx={{
-            bgcolor: '#0f172a',
-            color: '#fff',
-            px: 2,
-            py: 0.5,
-            borderRadius: '100px',
-            fontSize: '0.875rem',
-            fontWeight: 500
-          }}>
-            진행중
-          </Box>
-        </Box>
       </Box>
       <Box sx={{
         flex: 1,
         width: '100%',
-        bgcolor: '#0f172a',
+        bgcolor: '#0B1929',
         borderRadius: 2,
         p: 2,
         position: 'relative',
@@ -353,16 +359,13 @@ export default function TimelineSection() {
                             variant="caption" 
                             sx={{ 
                               transition: 'all 0.5s ease-in-out',
-                              color: project.id === highlightedProject ? '#ffffff' : 
-                                    (currentMonth > project.duration.end ? '#60a5fa' : '#ffffff'),
+                              color: project.id === highlightedProject ? '#2DD4BF' : 
+                                    (currentMonth > project.duration.end ? '#2DD4BF' : '#ffffff'),
                               whiteSpace: 'nowrap',
                               overflow: 'hidden',
                               textOverflow: 'ellipsis',
-                              fontWeight: project.id === highlightedProject ? 700 : 600,
+                              fontWeight: project.id === highlightedProject ? 600 : 400,
                               fontSize: 'inherit',
-                              textShadow: project.id === highlightedProject 
-                                ? '0 0 10px rgba(255, 255, 255, 0.5)'
-                                : '0 1px 2px rgba(0,0,0,0.2)',
                               letterSpacing: '0.2px',
                               width: '100%',
                               textAlign: 'inherit'
@@ -374,7 +377,7 @@ export default function TimelineSection() {
                             <Typography
                               variant="caption"
                               sx={{
-                                color: '#60a5fa',
+                                color: '#2DD4BF',
                                 mx: 0.5,
                                 fontWeight: 400
                               }}

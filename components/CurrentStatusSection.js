@@ -30,16 +30,16 @@ const StatusIcon = ({ icon: Icon, label, isActive }) => {
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: '50%',
-        backgroundColor: isActive ? 'rgba(33, 150, 243, 0.1)' : 'rgba(226, 232, 240, 0.3)',
+        backgroundColor: isActive ? 'rgba(45, 212, 191, 0.1)' : 'rgba(226, 232, 240, 0.3)',
       }}>
         <Icon sx={{ 
           fontSize: '3.12rem',
-          color: isActive ? '#2196f3' : '#94a3b8'
+          color: isActive ? '#2DD4BF' : '#94a3b8'
         }} />
       </Box>
       <Typography 
         sx={{ 
-          color: isActive ? '#2196f3' : '#94a3b8',
+          color: isActive ? '#2DD4BF' : '#94a3b8',
           fontSize: '1.04rem',
           mt: 1,
           fontWeight: 500
@@ -59,7 +59,7 @@ export default function CurrentStatusSection() {
       maxWidth: '800px',
       margin: '0 auto',
       p: 2,
-      bgcolor: '#1e293b',
+      bgcolor: '#0F2942',
       borderRadius: 1,
       display: 'flex',
       flexDirection: 'column'
@@ -78,7 +78,7 @@ export default function CurrentStatusSection() {
       <Box sx={{
         height: 'calc(100% - 10px)',
         width: '100%',
-        bgcolor: '#0f172a',
+        bgcolor: '#0B1929',
         borderRadius: 2,
         p: 2,
         display: 'flex',

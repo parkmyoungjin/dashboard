@@ -69,7 +69,7 @@ export default function ProgressSection() {
     setProjects(formattedProjects);
   }, [data]);
 
-  // 프로젝트 순환 표시 (3초 간격으로 변경)
+  // 프로젝트 순환 표시 (5초 간격으로 변경)
   useEffect(() => {
     if (!projects || projects.length <= 1) return;
 
@@ -79,7 +79,7 @@ export default function ProgressSection() {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % projects.length);
         setShow(true);
       }, 500);
-    }, 3000); // 3초로 변경
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [projects]);
@@ -102,7 +102,7 @@ export default function ProgressSection() {
         p: 2,
         display: 'flex',
         flexDirection: 'column',
-        bgcolor: '#1e293b',
+        bgcolor: '#0F2942',
         borderRadius: 1
       }}>
         <Typography 
@@ -120,7 +120,7 @@ export default function ProgressSection() {
 
         <Box sx={{ 
           height: 'calc(100% - 10px)',
-          bgcolor: '#0f172a',
+          bgcolor: '#0B1929',
           borderRadius: 2,
           p: '12px 16px',
           display: 'flex',
@@ -143,7 +143,7 @@ export default function ProgressSection() {
         p: 2,
         display: 'flex',
         flexDirection: 'column',
-        bgcolor: '#1e293b',
+        bgcolor: '#0F2942',
         borderRadius: 1
       }}>
         <Typography 
@@ -161,7 +161,7 @@ export default function ProgressSection() {
 
         <Box sx={{ 
           height: 'calc(100% - 10px)',
-          bgcolor: '#0f172a',
+          bgcolor: '#0B1929',
           borderRadius: 2,
           p: '12px 16px',
           display: 'flex',
@@ -184,7 +184,7 @@ export default function ProgressSection() {
         p: 2,
         display: 'flex',
         flexDirection: 'column',
-        bgcolor: '#1e293b',
+        bgcolor: '#0F2942',
         borderRadius: 1
       }}>
         <Typography 
@@ -202,7 +202,7 @@ export default function ProgressSection() {
 
         <Box sx={{ 
           height: 'calc(100% - 10px)',
-          bgcolor: '#0f172a',
+          bgcolor: '#0B1929',
           borderRadius: 2,
           p: '12px 16px',
           display: 'flex',
@@ -225,7 +225,7 @@ export default function ProgressSection() {
       maxWidth: '800px',
       margin: '0 auto',
       p: 2,
-      bgcolor: '#1e293b',
+      bgcolor: '#0F2942',
       borderRadius: 1,
       display: 'flex',
       flexDirection: 'column'
@@ -244,7 +244,7 @@ export default function ProgressSection() {
       <Box sx={{ 
         height: 'calc(100% - 10px)',
         width: '100%',
-        bgcolor: '#0f172a',
+        bgcolor: '#0B1929',
         borderRadius: 2,
         p: 2,
         display: 'flex',
@@ -320,7 +320,7 @@ export default function ProgressSection() {
                   sx={{
                     '& .MuiCircularProgress-circle': {
                       strokeLinecap: 'round',
-                      stroke: progress === null ? '#94a3b8' : 'url(#progressGradient)',
+                      stroke: progress === null ? '#94a3b8' : '#2DD4BF',
                     },
                   }}
                 />
@@ -345,7 +345,7 @@ export default function ProgressSection() {
                       textShadow: '0 1px 2px rgba(0,0,0,0.2)'
                     }}
                   >
-                    {progress === null ? '예정' : `${progress}%`}
+                    {progress === null ? '예정' : progress === 100 ? '완료' : `${progress}%`}
                   </Typography>
                 </Box>
               </Box>
@@ -365,7 +365,7 @@ export default function ProgressSection() {
                 width: '4px',
                 height: '4px',
                 borderRadius: '50%',
-                bgcolor: index === currentIndex ? '#60a5fa' : 'rgba(96, 165, 250, 0.3)',
+                bgcolor: index === currentIndex ? '#2DD4BF' : 'rgba(45, 212, 191, 0.3)',
                 transition: 'background-color 0.3s',
                 cursor: 'pointer'
               }}

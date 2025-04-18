@@ -3,52 +3,37 @@ import LightbulbIcon from '@mui/icons-material/Lightbulb';
 import PersonIcon from '@mui/icons-material/Person';
 import { useState, useEffect } from 'react';
 import { Fade } from '@mui/material';
+import { useSheetData } from '../hooks/useSheetData';
 
 export default function FuturePlanSection() {
-  const [ideas, setIdeas] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [show, setShow] = useState(true);
+  const { data, loading, error } = useSheetData('FuturePlanSection');
+  const [ideas, setIdeas] = useState([]);
+
+  // 데이터 변환 처리
+  useEffect(() => {
+    if (!data || data.length <= 1) return;
+
+    // 헤더를 제외한 데이터 행을 처리
+    const formattedIdeas = data.slice(1).map(row => ({
+      idea: row[0] || '',
+      description: row[1] || '',
+      proposer: row[2] || '익명'
+    }));
+    
+    setIdeas(formattedIdeas);
+  }, [data]);
 
   useEffect(() => {
-    const fetchIdeas = async () => {
-      try {
-        const response = await fetch('/api/sheets?sheet=FuturePlanSection');
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        
-        if (!Array.isArray(data) || data.length <= 1) {
-          throw new Error('데이터 형식이 올바르지 않습니다.');
-        }
-
-        // 헤더를 제외한 데이터 행을 처리
-        const formattedIdeas = data.slice(1).map(row => ({
-          idea: row[0] || '',
-          description: row[1] || '',
-          proposer: row[2] || '익명'
-        }));
-        
-        setIdeas(formattedIdeas);
-        setError(null);
-      } catch (error) {
-        console.error('Error fetching ideas data:', error);
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchIdeas();
-  }, []);
-
-  useEffect(() => {
-    if (!ideas || ideas.length <= 2) return;
+    if (!ideas || ideas.length <= 1) return;
     const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 2) >= ideas.length ? 0 : prevIndex + 2);
-    }, 5000);
+      setShow(false);
+      setTimeout(() => {
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % ideas.length);
+        setShow(true);
+      }, 500);
+    }, 10000);
     return () => clearInterval(interval);
   }, [ideas]);
 
@@ -124,8 +109,8 @@ export default function FuturePlanSection() {
     );
   }
 
-  const currentIdeas = ideas.slice(currentIndex, currentIndex + 2);
-  const totalPages = Math.ceil(ideas.length / 2);
+  const currentIdeas = ideas.slice(currentIndex, currentIndex + 1);
+  const totalPages = Math.ceil(ideas.length);
 
   return (
     <Box sx={{ 
@@ -134,21 +119,118 @@ export default function FuturePlanSection() {
       display: 'flex',
       flexDirection: 'column',
     }}>
-      <Typography 
-        variant="h6" 
-        sx={{ 
-          fontWeight: 600,
-          fontSize: '1rem',
-          color: '#fff',
-          mb: 1.5
-        }}
-      >
-        아이디어 보드
-      </Typography>
+      <Box sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'flex-end',
+        mb: 0
+      }}>
+        <Typography 
+          variant="h6" 
+          sx={{ 
+            fontWeight: 600,
+            fontSize: '1rem',
+            color: '#fff',
+            mb: 0.5
+          }}
+        >
+          미래 계획
+        </Typography>
+        {ideas.length > 1 && (
+          <Box sx={{ 
+            display: 'flex',
+            gap: 0.5,
+            pr: 1
+          }}>
+            {Array.from({ length: ideas.length }).map((_, idx) => (
+              <Box
+                key={idx}
+                onClick={() => setCurrentIndex(idx)}
+                sx={{
+                  position: 'relative',
+                  minWidth: '160px',
+                  height: '32px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  bgcolor: currentIndex === idx ? '#0B1929' : '#0F2942',
+                  color: currentIndex === idx ? '#2DD4BF' : '#94a3b8',
+                  borderRadius: '8px 8px 0 0',
+                  cursor: 'pointer',
+                  fontSize: '0.875rem',
+                  fontWeight: currentIndex === idx ? 600 : 500,
+                  transition: 'all 0.2s ease-in-out',
+                  zIndex: currentIndex === idx ? 10 : ideas.length - idx,
+                  '&:hover': {
+                    bgcolor: currentIndex === idx ? '#0B1929' : '#0F2942',
+                  },
+                  '&::before, &::after': {
+                    content: '""',
+                    position: 'absolute',
+                    width: '8px',
+                    height: '8px',
+                    bottom: 0,
+                    bgcolor: 'transparent',
+                    transition: 'all 0.2s ease-in-out'
+                  },
+                  '&::before': {
+                    left: '-8px',
+                    background: `radial-gradient(circle at 0 0,
+                      transparent 8px,
+                      ${currentIndex === idx ? '#0B1929' : '#0F2942'} 0)`
+                  },
+                  '&::after': {
+                    right: '-8px',
+                    background: `radial-gradient(circle at 8px 0,
+                      transparent 8px,
+                      ${currentIndex === idx ? '#0B1929' : '#0F2942'} 0)`
+                  }
+                }}
+              >
+                <Box sx={{ 
+                  position: 'relative',
+                  zIndex: 1,
+                  height: '100%',
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  px: 1,
+                  overflow: 'hidden'
+                }}>
+                  <Stack
+                    direction="row"
+                    spacing={0.5}
+                    alignItems="center"
+                    sx={{
+                      width: '100%',
+                      justifyContent: 'center'
+                    }}
+                  >
+                    <LightbulbIcon sx={{ fontSize: '0.9rem' }} />
+                    <Typography
+                      noWrap
+                      sx={{
+                        fontSize: '0.875rem',
+                        textAlign: 'center',
+                        letterSpacing: ideas[idx]?.idea?.length > 12 ? '-0.05em' : 'normal',
+                        flex: 1,
+                        maxWidth: '85%'
+                      }}
+                    >
+                      {ideas[idx]?.idea || ''}
+                    </Typography>
+                  </Stack>
+                </Box>
+              </Box>
+            ))}
+          </Box>
+        )}
+      </Box>
       <Box sx={{
         flex: 1,
         width: '100%',
-        bgcolor: '#0f172a',
+        bgcolor: '#0B1929',
         borderRadius: 1,
         p: 1.5,
         display: 'flex',
@@ -157,22 +239,21 @@ export default function FuturePlanSection() {
       }}>
         <Box sx={{ flex: 1, overflow: 'hidden' }}>
           <Fade in={show} timeout={500}>
-            <List sx={{ 
-              p: 0,
-              height: '100%',
-              '& .MuiListItem-root': { 
-                py: 1,
-                px: 2,
-                backgroundColor: 'background.default',
-                borderRadius: 1,
-                mb: 0.5,
-                '&:last-child': {
-                  mb: 0
-                }
-              }
-            }}>
+            <Box sx={{ height: '100%' }}>
               {currentIdeas.map((idea, index) => (
-                <ListItem key={currentIndex + index}>
+                <Box 
+                  key={currentIndex + index}
+                  sx={{
+                    backgroundColor: 'background.default',
+                    borderRadius: 1,
+                    mb: 0.5,
+                    px: 2,
+                    py: 1.75,
+                    '&:last-child': {
+                      mb: 0
+                    }
+                  }}
+                >
                   <Stack direction="row" spacing={1} alignItems="center" sx={{ width: '100%' }}>
                     <Chip
                       icon={<LightbulbIcon sx={{ fontSize: '1.3rem' }} />}
@@ -214,31 +295,10 @@ export default function FuturePlanSection() {
                       }}
                     />
                   </Stack>
-                </ListItem>
+                </Box>
               ))}
-            </List>
+            </Box>
           </Fade>
-        </Box>
-        <Box sx={{ 
-          display: 'flex', 
-          justifyContent: 'center', 
-          mt: 0.5,
-          gap: 0.5
-        }}>
-          {ideas.length > 2 && Array.from({ length: totalPages }).map((_, index) => (
-            <Box
-              key={index}
-              onClick={() => setCurrentIndex(index * 2)}
-              sx={{
-                width: '4px',
-                height: '4px',
-                borderRadius: '50%',
-                bgcolor: Math.floor(currentIndex / 2) === index ? '#60a5fa' : 'rgba(96, 165, 250, 0.3)',
-                transition: 'background-color 0.3s',
-                cursor: 'pointer'
-              }}
-            />
-          ))}
         </Box>
       </Box>
     </Box>

@@ -109,7 +109,7 @@ export default function NewsSection() {
         maxWidth: '800px',
         margin: '0 auto',
         p: 2,
-        bgcolor: '#1e293b',
+        bgcolor: '#0F2942',
         borderRadius: 1,
         display: 'flex',
         flexDirection: 'column'
@@ -127,7 +127,7 @@ export default function NewsSection() {
         </Typography>
         <Box sx={{ 
           height: 'calc(100% - 10px)',
-          bgcolor: '#0f172a',
+          bgcolor: '#0B1929',
           borderRadius: 2,
           p: 2,
           display: 'flex',
@@ -149,7 +149,7 @@ export default function NewsSection() {
         maxWidth: '800px',
         margin: '0 auto',
         p: 2,
-        bgcolor: '#1e293b',
+        bgcolor: '#0F2942',
         borderRadius: 1,
         display: 'flex',
         flexDirection: 'column'
@@ -167,7 +167,7 @@ export default function NewsSection() {
         </Typography>
         <Box sx={{ 
           height: 'calc(100% - 10px)',
-          bgcolor: '#0f172a',
+          bgcolor: '#0B1929',
           borderRadius: 2,
           p: 2,
           display: 'flex',
@@ -188,7 +188,7 @@ export default function NewsSection() {
         maxWidth: '800px',
         margin: '0 auto',
         p: 2,
-        bgcolor: '#1e293b',
+        bgcolor: '#0F2942',
         borderRadius: 1,
         display: 'flex',
         flexDirection: 'column'
@@ -206,7 +206,7 @@ export default function NewsSection() {
         </Typography>
         <Box sx={{ 
           height: 'calc(100% - 10px)',
-          bgcolor: '#0f172a',
+          bgcolor: '#0B1929',
           borderRadius: 2,
           p: 2,
           display: 'flex',
@@ -226,7 +226,7 @@ export default function NewsSection() {
       maxWidth: '800px',
       margin: '0 auto',
       p: 2,
-      bgcolor: '#1e293b',
+      bgcolor: '#0F2942',
       borderRadius: 1,
       display: 'flex',
       flexDirection: 'column'
@@ -245,7 +245,7 @@ export default function NewsSection() {
       <Box sx={{ 
         height: 'calc(100% - 10px)',
         width: '100%',
-        bgcolor: '#0f172a',
+        bgcolor: '#0B1929',
         borderRadius: 2,
         p: 2,
         display: 'flex',
@@ -311,7 +311,7 @@ export default function NewsSection() {
                 width: '4px',
                 height: '4px',
                 borderRadius: '50%',
-                bgcolor: index === currentIndex ? '#60a5fa' : 'rgba(96, 165, 250, 0.3)',
+                bgcolor: index === currentIndex ? '#2DD4BF' : 'rgba(45, 212, 191, 0.3)',
                 transition: 'background-color 0.3s'
               }}
             />
