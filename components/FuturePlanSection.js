@@ -134,7 +134,7 @@ export default function FuturePlanSection() {
             mb: 0.5
           }}
         >
-          미래 계획
+          아이디어 보드
         </Typography>
         {ideas.length > 1 && (
           <Box sx={{ 
