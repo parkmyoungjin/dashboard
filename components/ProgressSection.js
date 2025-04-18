@@ -79,7 +79,7 @@ export default function ProgressSection() {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % projects.length);
         setShow(true);
       }, 500);
-    }, 5000);
+    }, 10000);
 
     return () => clearInterval(interval);
   }, [projects]);
