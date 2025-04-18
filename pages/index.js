@@ -18,6 +18,7 @@ const DashboardContainer = styled(Container)(({ theme }) => ({
   position: 'relative',
   display: 'flex',
   flexDirection: 'column',
+  background: '#0c0e1d',
   [theme.breakpoints.down('sm')]: {
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
@@ -84,7 +85,7 @@ export default function Dashboard() {
         background: '#0c0e1d',
         backdropFilter: 'blur(8px)',
         borderRadius: 2,
-        border: '1px solid rgba(96, 165, 250, 0.1)',
+        border: 'none',
       }}>
         <Box sx={{ 
           display: 'flex', 
@@ -122,15 +123,14 @@ export default function Dashboard() {
             <Paper sx={{ 
               p: '12px',
               height: '100%',
-              background: 'rgba(30, 41, 59, 0.8)',
+              background: 'rgba(15, 41, 66, 1)',
               backdropFilter: 'blur(8px)',
               borderRadius: 2,
-              border: '1px solid rgba(96, 165, 250, 0.1)',
+              border: 'none',
               transition: 'all 0.3s',
               '&:hover': {
                 boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
                 transform: 'translateY(-2px)',
-                borderColor: 'rgba(96, 165, 250, 0.3)',
               }
             }}>
               <ProgressSection />
@@ -140,15 +140,14 @@ export default function Dashboard() {
             <Paper sx={{ 
               p: '12px',
               height: '100%',
-              background: 'rgba(30, 41, 59, 0.8)',
+              background: 'rgba(15, 41, 66, 1)',
               backdropFilter: 'blur(8px)',
               borderRadius: 2,
-              border: '1px solid rgba(96, 165, 250, 0.1)',
+              border: 'none',
               transition: 'all 0.3s',
               '&:hover': {
                 boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
                 transform: 'translateY(-2px)',
-                borderColor: 'rgba(96, 165, 250, 0.3)',
               }
             }}>
               <CurrentStatusSection />
@@ -158,15 +157,14 @@ export default function Dashboard() {
             <Paper sx={{ 
               p: '12px',
               height: '100%',
-              background: 'rgba(30, 41, 59, 0.8)',
+              background: 'rgba(15, 41, 66, 1)',
               backdropFilter: 'blur(8px)',
               borderRadius: 2,
-              border: '1px solid rgba(96, 165, 250, 0.1)',
+              border: 'none',
               transition: 'all 0.3s',
               '&:hover': {
                 boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
                 transform: 'translateY(-2px)',
-                borderColor: 'rgba(96, 165, 250, 0.3)',
               }
             }}>
               <NewsSection />
@@ -177,6 +175,7 @@ export default function Dashboard() {
             <Paper sx={{ 
               p: 3,
               height: '360px',
+              border: 'none',
               display: 'flex',
               flexDirection: 'column'
             }}>
@@ -188,6 +187,7 @@ export default function Dashboard() {
             <Paper sx={{ 
               p: 0,
               height: '160px',
+              border: 'none',
               display: 'flex',
               flexDirection: 'column',
               overflow: 'hidden',
@@ -206,6 +206,7 @@ export default function Dashboard() {
             <Paper sx={{ 
               p: 0,
               height: '160px',
+              border: 'none',
               display: 'flex',
               flexDirection: 'column',
               overflow: 'hidden',
