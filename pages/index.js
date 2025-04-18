@@ -132,9 +132,9 @@ const TimeDisplay = dynamic(() => Promise.resolve(() => {
         <Box sx={{
           height: '100%',
           width: `${batteryLevel}%`,
-          bgcolor: '#2DD4BF',
+          bgcolor: batteryLevel > 30 ? '#2DD4BF' : batteryLevel > 20 ? '#FFA500' : '#FF0000',
           borderRadius: '2px',
-          transition: 'width 0.3s ease'
+          transition: 'width 0.3s ease, background-color 0.3s ease'
         }} />
         <Typography sx={{
           position: 'absolute',
@@ -143,7 +143,7 @@ const TimeDisplay = dynamic(() => Promise.resolve(() => {
           transform: 'translate(-50%, -50%)',
           fontSize: '0.7rem',
           fontWeight: 'bold',
-          color: batteryLevel > 50 ? '#ffffff' : '#ffffff'
+          color: '#ffffff'
         }}>
           {Math.round(batteryLevel)}%
         </Typography>
