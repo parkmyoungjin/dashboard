@@ -108,10 +108,57 @@ export default function TimelineSection() {
     return null;
   };
 
-  // 날짜를 타임라인 위치값으로 변환하는 함수
+  // 프로젝트 데이터에서 날짜 범위 가져오기
+  const getProjectDateRange = (projectsData) => {
+    if (!projectsData || projectsData.length === 0) {
+      return {
+        minDate: new Date(new Date().getFullYear(), 0, 1),
+        maxDate: new Date(new Date().getFullYear(), 11, 31)
+      };
+    }
+    
+    let minDate = new Date(3000, 0, 1); // 미래 날짜로 초기화
+    let maxDate = new Date(1970, 0, 1); // 과거 날짜로 초기화
+    
+    // 모든 프로젝트를 돌면서 최소/최대 날짜 찾기
+    projectsData.forEach(row => {
+      if (!row[2] || !row[3]) return;
+      
+      const startDate = parseDate(row[2], false);
+      const endDate = parseDate(row[3], true);
+      
+      if (startDate && startDate < minDate) minDate = startDate;
+      if (endDate && endDate > maxDate) maxDate = endDate;
+    });
+    
+    // 기본값: 현재 연도
+    if (minDate > maxDate) {
+      minDate = new Date(new Date().getFullYear(), 0, 1);
+      maxDate = new Date(new Date().getFullYear(), 11, 31);
+    }
+    
+    return { minDate, maxDate };
+  };
+
+  // 날짜를 타임라인 위치값으로 변환하는 함수 - 올해 기준으로 변경
   const getDatePosition = (date) => {
     if (!date) return 0;
-    const startOfYear = new Date(date.getFullYear(), 0, 1);
+    
+    const currentYear = new Date().getFullYear();
+    const startOfYear = new Date(currentYear, 0, 1);
+    const endOfYear = new Date(currentYear, 11, 31);
+    
+    // 날짜가 올해 이전이면 0% 반환
+    if (date.getFullYear() < currentYear) {
+      return 0;
+    }
+    
+    // 날짜가 올해 이후면 100% 반환
+    if (date.getFullYear() > currentYear) {
+      return 100;
+    }
+    
+    // 올해 날짜의 경우 해당 연도 내 위치 계산
     const daysInYear = 365; // 윤년은 고려하지 않음
     const dayOfYear = Math.floor((date - startOfYear) / (24 * 60 * 60 * 1000));
     return (dayOfYear / daysInYear) * 100;
@@ -137,7 +184,7 @@ export default function TimelineSection() {
   // 데이터 변환 처리
   useEffect(() => {
     if (!data || data.length <= 1) return;
-
+    
     // 헤더를 제외한 데이터 행을 처리
     const formattedProjects = data.slice(1).map((row, index) => {
       const startDate = parseDate(row[2], false);

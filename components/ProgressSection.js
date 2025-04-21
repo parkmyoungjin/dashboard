@@ -8,48 +8,78 @@ export default function ProgressSection() {
   const { data, loading, error } = useSheetData();
   const [projects, setProjects] = useState([]);
 
-  // 날짜 형식 처리 함수
+  // 날짜 형식 처리 함수 - 완전히 새로운 구현
   const parseDate = (dateStr, isEndDate = false) => {
     if (!dateStr) return null;
     
-    // YYYY-MM 형식 체크
-    if (/^\d{4}-\d{2}$/.test(dateStr)) {
-      const [year, month] = dateStr.split('-').map(Number);
-      if (isEndDate) {
-        // month는 0-based이므로 현재 달의 마지막 날을 구하기 위해 다음 달의 0일을 구함
-        return new Date(Date.UTC(year, month - 1, 0));
+    try {
+      // YYYY-MM 형식 체크
+      if (/^\d{4}-\d{2}$/.test(dateStr)) {
+        const [year, month] = dateStr.split('-').map(Number);
+        
+        if (isEndDate) {
+          // 월의 마지막 날 계산 (다음 달의 첫 날에서 하루 빼기)
+          const nextMonth = new Date(year, month, 1);
+          return new Date(nextMonth.getTime() - 86400000); // 하루를 밀리초로 빼기
+        } else {
+          // 월의 첫 날
+          return new Date(year, month - 1, 1);
+        }
+      } 
+      // YYYY-MM-DD 형식 체크
+      else if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+        const [year, month, day] = dateStr.split('-').map(Number);
+        return new Date(year, month - 1, day);
       }
-      return new Date(Date.UTC(year, month - 1, 1));
+      return null;
+    } catch (error) {
+      console.error("날짜 파싱 오류:", error);
+      return null;
     }
-    // YYYY-MM-DD 형식 체크
-    else if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
-      const [year, month, day] = dateStr.split('-').map(Number);
-      return new Date(Date.UTC(year, month - 1, day));
-    }
-    return null;
   };
 
-  // 진행률 계산 함수
+  // 두 날짜 사이의 일수 계산 함수
+  const getDaysBetween = (startDate, endDate) => {
+    // 시간 제거하고 날짜만 비교하기 위해 날짜를 00:00:00으로 설정
+    const start = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+    const end = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
+    
+    // 밀리초 -> 일
+    return Math.round((end - start) / (24 * 60 * 60 * 1000));
+  };
+
+  // 진행률 계산 함수 - 완전히 새로운 구현
   const calculateProgress = (startDate, endDate) => {
     if (!startDate || !endDate) return null;
     
+    // 날짜 파싱
     const start = parseDate(startDate, false);
     const end = parseDate(endDate, true);
     
     if (!start || !end) return null;
     
+    // 현재 날짜 (시간 정보 제거)
     const today = new Date();
-    today.setHours(0, 0, 0, 0); // 시간 제거하고 날짜만 비교
-    const todayUtc = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()));
-
-    // 시작일과 종료일이 미래인 경우 체크
-    if (start.getTime() > todayUtc.getTime()) return null;  // 시작일이 미래면 null 반환
-    if (todayUtc.getTime() > end.getTime()) return 100;     // 종료일이 지났으면 100% 반환
+    const currentDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     
-    const total = end.getTime() - start.getTime();
-    const current = todayUtc.getTime() - start.getTime();
+    // 시작일이 미래인 경우
+    if (currentDate < start) {
+      return 0;
+    }
     
-    return Math.round((current / total) * 100);
+    // 종료일이 지난 경우
+    if (currentDate > end) {
+      return 100;
+    }
+    
+    // 총 기간(일)
+    const totalDays = getDaysBetween(start, end);
+    
+    // 시작일부터 현재까지 기간(일)
+    const passedDays = getDaysBetween(start, currentDate);
+    
+    // 진행률 계산 (소수점 반올림)
+    return Math.round((passedDays / totalDays) * 100);
   };
 
   // 데이터 변환 처리

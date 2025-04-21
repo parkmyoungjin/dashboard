@@ -1,5 +1,5 @@
 import { Box, Container, Grid, Paper, Typography } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { styled, keyframes } from '@mui/material/styles';
 import ProgressSection from '../components/ProgressSection';
 import TimelineSection from '../components/TimelineSection';
 import CurrentStatusSection from '../components/CurrentStatusSection';
@@ -8,6 +8,45 @@ import EventSection from '../components/EventSection';
 import NewsSection from '../components/NewsSection';
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
+
+// 깜빡임 애니메이션 정의
+const pulse = keyframes`
+  0% { opacity: 1; }
+  50% { opacity: 0.4; }
+  100% { opacity: 1; }
+`;
+
+// 애니메이션이 적용된 배터리 내부 컴포넌트
+const BatteryBar = styled(Box)(({ theme, batteryLevel }) => ({
+  height: '100%',
+  width: `${batteryLevel}%`,
+  backgroundColor: batteryLevel > 30 ? '#2DD4BF' : batteryLevel > 20 ? '#FFA500' : '#FF0000',
+  borderRadius: '2px',
+  transition: 'width 0.3s ease, background-color 0.3s ease',
+  ...(batteryLevel <= 10 && {
+    animation: `${pulse} 2s ease-in-out infinite`,
+  }),
+}));
+
+const BatteryContainer = styled(Box)(({ theme }) => ({
+  width: '40px',
+  height: '20px',
+  border: '2px solid #ffffff',
+  borderRadius: '3px',
+  padding: '2px',
+  position: 'relative',
+  '&::after': {
+    content: '""',
+    position: 'absolute',
+    top: '50%',
+    right: '-4px',
+    transform: 'translateY(-50%)',
+    width: '3px',
+    height: '10px',
+    backgroundColor: '#ffffff',
+    borderRadius: '0 2px 2px 0',
+  },
+}));
 
 const DashboardContainer = styled(Container)(({ theme }) => ({
   height: '100vh',
@@ -64,7 +103,7 @@ const PageTitle = styled(Typography)(({ theme }) => ({
 const TimeDisplay = dynamic(() => Promise.resolve(() => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [batteryLevel, setBatteryLevel] = useState(100);
-
+  
   useEffect(() => {
     const timer = setInterval(() => {
       const now = new Date();
@@ -124,18 +163,12 @@ const TimeDisplay = dynamic(() => Promise.resolve(() => {
         position: 'relative',
         bgcolor: 'rgba(45, 212, 191, 0.1)',
         borderRadius: '3px',
-        border: '1px solid #2DD4BF',
+        border: '1px solid #ffffff',
         display: 'flex',
         alignItems: 'center',
         padding: '2px'
       }}>
-        <Box sx={{
-          height: '100%',
-          width: `${batteryLevel}%`,
-          bgcolor: batteryLevel > 30 ? '#2DD4BF' : batteryLevel > 20 ? '#FFA500' : '#FF0000',
-          borderRadius: '2px',
-          transition: 'width 0.3s ease, background-color 0.3s ease'
-        }} />
+        <BatteryBar batteryLevel={batteryLevel} />
         <Typography sx={{
           position: 'absolute',
           left: '50%',
