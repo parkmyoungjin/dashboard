@@ -138,35 +138,35 @@ const TimeDisplay = dynamic(() => Promise.resolve(() => {
     const minutes = String(date.getMinutes()).padStart(2, '0');
     const seconds = String(date.getSeconds()).padStart(2, '0');
     
-    return `${year}.${month}.${day} ${hours}:${minutes}:${seconds}`;
+    return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
   };
 
   return (
     <Box sx={{
       display: 'flex',
       alignItems: 'center',
-      gap: 2,
+      gap: 4,
       color: '#ffffff'
     }}>
       <Typography sx={{
-        fontSize: '1.1rem',
-        fontWeight: 500,
+        fontSize: '2.2rem',
+        fontWeight: 700,
         letterSpacing: '0.5px',
-        fontFamily: 'monospace',
+        fontFamily: 'Roboto',
         color: '#ffffff'
       }}>
         {formatDate(currentTime)}
       </Typography>
       <Box sx={{ 
-        width: '48px',
-        height: '24px',
+        width: '64px',
+        height: '32px',
         position: 'relative',
         bgcolor: 'rgba(45, 212, 191, 0.1)',
-        borderRadius: '3px',
+        borderRadius: '4px',
         border: '1px solid #ffffff',
         display: 'flex',
         alignItems: 'center',
-        padding: '2px'
+        padding: '3px'
       }}>
         <BatteryBar batteryLevel={batteryLevel} />
         <Typography sx={{
@@ -174,7 +174,7 @@ const TimeDisplay = dynamic(() => Promise.resolve(() => {
           left: '50%',
           top: '50%',
           transform: 'translate(-50%, -50%)',
-          fontSize: '0.7rem',
+          fontSize: '0.9rem',
           fontWeight: 'bold',
           color: '#ffffff'
         }}>
