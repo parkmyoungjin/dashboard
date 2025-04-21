@@ -149,11 +149,14 @@ const TimeDisplay = dynamic(() => Promise.resolve(() => {
       color: '#ffffff'
     }}>
       <Typography sx={{
-        fontSize: '2.2rem',
+        fontSize: '1.8rem',
         fontWeight: 700,
         letterSpacing: '0.5px',
         fontFamily: 'Roboto',
-        color: '#ffffff'
+        color: '#ffffff',
+        lineHeight: 1,
+        display: 'flex',
+        alignItems: 'center'
       }}>
         {formatDate(currentTime)}
       </Typography>
@@ -166,7 +169,7 @@ const TimeDisplay = dynamic(() => Promise.resolve(() => {
         border: '1px solid #ffffff',
         display: 'flex',
         alignItems: 'center',
-        padding: '3px'
+        padding: '2px'
       }}>
         <BatteryBar batteryLevel={batteryLevel} />
         <Typography sx={{
@@ -174,7 +177,7 @@ const TimeDisplay = dynamic(() => Promise.resolve(() => {
           left: '50%',
           top: '50%',
           transform: 'translate(-50%, -50%)',
-          fontSize: '0.9rem',
+          fontSize: '1rem',
           fontWeight: 'bold',
           color: '#ffffff'
         }}>
