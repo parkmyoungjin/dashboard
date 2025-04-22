@@ -58,9 +58,9 @@ export default function CurrentStatusSection() {
       width: '100%',
       maxWidth: '800px',
       margin: '0 auto',
-      p: 2,
+      p: 1,
       bgcolor: '#0F2942',
-      borderRadius: 1,
+      borderRadius: 2,
       display: 'flex',
       flexDirection: 'column'
     }}>
@@ -68,9 +68,9 @@ export default function CurrentStatusSection() {
         variant="h6" 
         sx={{ 
           fontWeight: 600,
-          fontSize: '1rem',
+          fontSize: '1.5rem',
           color: '#fff',
-          mb: 1.5
+          mb: 1.0
         }}
       >
         Global Hub 진행 단계
@@ -79,7 +79,7 @@ export default function CurrentStatusSection() {
         height: 'calc(100% - 10px)',
         width: '100%',
         bgcolor: '#0B1929',
-        borderRadius: 2,
+        borderRadius: 1,
         p: 2,
         display: 'flex',
         flexDirection: 'column',

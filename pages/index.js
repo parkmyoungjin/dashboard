@@ -3,9 +3,9 @@ import { styled, keyframes } from '@mui/material/styles';
 import ProgressSection from '../components/ProgressSection';
 import TimelineSection from '../components/TimelineSection';
 import CurrentStatusSection from '../components/CurrentStatusSection';
-import FuturePlanSection from '../components/FuturePlanSection';
 import EventSection from '../components/EventSection';
 import NewsSection from '../components/NewsSection';
+import CalendarSection from '../components/CalendarSection';
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 
@@ -254,109 +254,36 @@ export default function Dashboard() {
         </Box>
       </Paper>
 
-      <Grid container spacing={2} sx={{ flex: 1, overflow: 'hidden' }}>
-        <Grid item xs={12} container spacing={2}>
-          <Grid item xs={12} md={4}>
-            <Paper sx={{ 
-              p: '12px',
-              height: '100%',
-              background: 'rgba(15, 41, 66, 1)',
-              backdropFilter: 'blur(8px)',
-              borderRadius: 2,
-              border: 'none',
-              transition: 'all 0.3s',
-              '&:hover': {
-                boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
-                transform: 'translateY(-2px)',
-              }
-            }}>
-              <ProgressSection />
-            </Paper>
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <Paper sx={{ 
-              p: '12px',
-              height: '100%',
-              background: 'rgba(15, 41, 66, 1)',
-              backdropFilter: 'blur(8px)',
-              borderRadius: 2,
-              border: 'none',
-              transition: 'all 0.3s',
-              '&:hover': {
-                boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
-                transform: 'translateY(-2px)',
-              }
-            }}>
-              <CurrentStatusSection />
-            </Paper>
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <Paper sx={{ 
-              p: '12px',
-              height: '100%',
-              background: 'rgba(15, 41, 66, 1)',
-              backdropFilter: 'blur(8px)',
-              borderRadius: 2,
-              border: 'none',
-              transition: 'all 0.3s',
-              '&:hover': {
-                boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
-                transform: 'translateY(-2px)',
-              }
-            }}>
-              <NewsSection />
-            </Paper>
-          </Grid>
-
-          <Grid item xs={12}>
-            <Paper sx={{ 
-              p: 3,
-              height: '360px',
-              border: 'none',
-              display: 'flex',
-              flexDirection: 'column'
-            }}>
-              <TimelineSection />
-            </Paper>
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            <Paper sx={{ 
-              p: 0,
-              height: '160px',
-              border: 'none',
-              display: 'flex',
-              flexDirection: 'column',
-              overflow: 'hidden',
-              '& > div': {
-                padding: 3,
-                height: '100%',
-                display: 'flex',
-                flexDirection: 'column',
-              }
-            }}>
-              <FuturePlanSection />
-            </Paper>
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            <Paper sx={{ 
-              p: 0,
-              height: '160px',
-              border: 'none',
-              display: 'flex',
-              flexDirection: 'column',
-              overflow: 'hidden',
-              '& > div': {
-                padding: 3,
-                height: '100%',
-                display: 'flex',
-                flexDirection: 'column',
-              }
-            }}>
-              <EventSection />
-            </Paper>
-          </Grid>
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={4}>
+          <DashboardCard>
+            <ProgressSection />
+          </DashboardCard>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <DashboardCard>
+            <CurrentStatusSection />
+          </DashboardCard>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <DashboardCard>
+            <CalendarSection />
+          </DashboardCard>
+        </Grid>
+        <Grid item xs={12}>
+          <DashboardCard>
+            <TimelineSection />
+          </DashboardCard>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <DashboardCard>
+            <EventSection />
+          </DashboardCard>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <DashboardCard>
+            <NewsSection />
+          </DashboardCard>
         </Grid>
       </Grid>
     </DashboardContainer>

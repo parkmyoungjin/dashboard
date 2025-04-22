@@ -47,7 +47,7 @@ export default function EventSection() {
         margin: '0 auto',
         p: 2,
         bgcolor: '#0F2942',
-        borderRadius: 1,
+        borderRadius: 2,
         display: 'flex',
         flexDirection: 'column'
       }}>
@@ -83,7 +83,7 @@ export default function EventSection() {
         margin: '0 auto',
         p: 2,
         bgcolor: '#0F2942',
-        borderRadius: 1,
+        borderRadius: 2,
         display: 'flex',
         flexDirection: 'column'
       }}>
@@ -127,7 +127,7 @@ export default function EventSection() {
           variant="h6" 
           sx={{ 
             fontWeight: 600,
-            fontSize: '1rem',
+            fontSize: '1.5rem',
             color: '#fff',
             mb: 0.5
           }}
@@ -138,7 +138,7 @@ export default function EventSection() {
           <Box sx={{ 
             display: 'flex',
             gap: 0.5,
-            pr: 1
+            pr: 2
           }}>
             {Array.from({ length: events.length }).map((_, idx) => (
               <Box
@@ -198,18 +198,18 @@ export default function EventSection() {
                 }}>
                   <Stack
                     direction="row"
-                    spacing={0.5}
+                    spacing={1}
                     alignItems="center"
                     sx={{
                       width: '100%',
                       justifyContent: 'center'
                     }}
                   >
-                    <CalendarTodayIcon sx={{ fontSize: '0.9rem' }} />
+                    <CalendarTodayIcon sx={{ fontSize: '1rem' }} />
                     <Typography
                       noWrap
                       sx={{
-                        fontSize: '0.875rem',
+                        fontSize: '1rem',
                         textAlign: 'center',
                         letterSpacing: events[idx]?.title?.length > 12 ? '-0.05em' : 'normal',
                         flex: 1,
@@ -245,8 +245,7 @@ export default function EventSection() {
                 justifyContent: 'space-between',
                 backgroundColor: 'background.default',
                 borderRadius: 1,
-                px: 2,
-                py: 1.75
+                p: 3,
               }}>
                 <Stack direction="row" spacing={1} alignItems="center" sx={{ width: '100%' }}>
                   <Chip
@@ -257,14 +256,14 @@ export default function EventSection() {
                     sx={{ 
                       height: '32px',
                       '& .MuiChip-label': { 
-                        fontSize: '1.1rem',
+                        fontSize: '1.3rem',
                         fontWeight: 600
                       } 
                     }}
                   />
                   <Typography sx={{
                     color: '#94a3b8',
-                    fontSize: '1.1rem',
+                    fontSize: '1.3rem',
                     flex: 1,
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
@@ -281,7 +280,7 @@ export default function EventSection() {
                       height: '24px',
                       minWidth: 'fit-content',
                       '& .MuiChip-label': { 
-                        fontSize: '0.75rem' 
+                        fontSize: '1rem' 
                       } 
                     }}
                   />

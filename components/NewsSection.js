@@ -103,16 +103,12 @@ export default function NewsSection() {
 
   if (loading) {
     return (
-      <Box sx={{ 
-        height: '100%',
-        width: '100%',
-        maxWidth: '800px',
-        margin: '0 auto',
+      <Box sx={{
+        bgcolor: '#1e293b',
+        borderRadius: '8px',
         p: 2,
-        bgcolor: '#0F2942',
-        borderRadius: 1,
-        display: 'flex',
-        flexDirection: 'column'
+        height: '100%',
+        overflow: 'hidden'
       }}>
         <Typography 
           variant="h6" 
@@ -143,16 +139,12 @@ export default function NewsSection() {
 
   if (error) {
     return (
-      <Box sx={{ 
-        height: '100%',
-        width: '100%',
-        maxWidth: '800px',
-        margin: '0 auto',
+      <Box sx={{
+        bgcolor: '#1e293b',
+        borderRadius: '8px',
         p: 2,
-        bgcolor: '#0F2942',
-        borderRadius: 1,
-        display: 'flex',
-        flexDirection: 'column'
+        height: '100%',
+        overflow: 'hidden'
       }}>
         <Typography 
           variant="h6" 
@@ -182,16 +174,12 @@ export default function NewsSection() {
 
   if (!news.length) {
     return (
-      <Box sx={{ 
-        height: '100%',
-        width: '100%',
-        maxWidth: '800px',
-        margin: '0 auto',
+      <Box sx={{
+        bgcolor: '#1e293b',
+        borderRadius: '8px',
         p: 2,
-        bgcolor: '#0F2942',
-        borderRadius: 1,
-        display: 'flex',
-        flexDirection: 'column'
+        height: '100%',
+        overflow: 'hidden'
       }}>
         <Typography 
           variant="h6" 
@@ -220,33 +208,29 @@ export default function NewsSection() {
   }
 
   return (
-    <Box sx={{ 
-      height: '100%',
-      width: '100%',
-      maxWidth: '800px',
-      margin: '0 auto',
+    <Box sx={{
+      bgcolor: '#0f2942',
+      borderRadius: 2,
       p: 2,
-      bgcolor: '#0F2942',
-      borderRadius: 1,
-      display: 'flex',
-      flexDirection: 'column'
+      height: '100%',
+      overflow: 'hidden'
     }}>
       <Typography 
         variant="h6" 
         sx={{ 
           fontWeight: 600,
-          fontSize: '1rem',
+          fontSize: '1.5rem',
           color: '#fff',
-          mb: 1.5
+          mb: 0.5
         }}
       >
         오늘의 메디컬 이슈
       </Typography>
       <Box sx={{ 
-        height: 'calc(100% - 10px)',
+        height: 'calc(100% - 30px)',
         width: '100%',
         bgcolor: '#0B1929',
-        borderRadius: 2,
+        borderRadius: 1,
         p: 2,
         display: 'flex',
         flexDirection: 'column',
@@ -257,16 +241,28 @@ export default function NewsSection() {
           flexDirection: 'column',
           gap: 0.5
         }}>
-          <Typography 
-            variant="caption" 
-            sx={{ 
+          <Box sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}>
+            <Typography 
+              variant="caption" 
+              sx={{ 
+                color: '#94a3b8',
+                fontSize: '0.8rem',
+                fontWeight: 600
+              }}
+            >
+              {news[currentIndex]?.source}
+            </Typography>
+            <Typography sx={{ 
               color: '#94a3b8',
-              fontSize: '0.8rem',
-              fontWeight: 600
-            }}
-          >
-            {news[currentIndex]?.source}
-          </Typography>
+              fontSize: '0.8rem'
+            }}>
+              {news[currentIndex]?.date}
+            </Typography>
+          </Box>
           <Link 
             href={news[currentIndex]?.link} 
             target="_blank" 
@@ -291,12 +287,6 @@ export default function NewsSection() {
               {news[currentIndex]?.title}
             </Typography>
           </Link>
-          <Typography sx={{ 
-            color: '#94a3b8',
-            fontSize: '0.8rem'
-          }}>
-            {news[currentIndex]?.date}
-          </Typography>
         </Box>
         <Box sx={{ 
           display: 'flex', 

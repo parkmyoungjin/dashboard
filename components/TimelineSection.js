@@ -28,7 +28,6 @@ const ProjectBar = styled(Box)(({ theme }) => ({
 
 const MonthLabel = styled(Typography, {
   shouldComponentUpdate: props => props.isCurrentMonth,
-  // eslint-disable-next-line no-unused-vars
   shouldForwardProp: prop => prop !== 'isCurrentMonth'
 })(({ theme, isCurrentMonth }) => ({
   fontSize: '0.9rem',
@@ -37,6 +36,7 @@ const MonthLabel = styled(Typography, {
   position: 'relative',
   paddingBottom: theme.spacing(1.5),
   fontWeight: isCurrentMonth ? 600 : 400,
+  zIndex: 3,
   '&::after': isCurrentMonth ? {
     content: '""',
     position: 'absolute',
@@ -75,11 +75,23 @@ const TimelineContainer = styled(Box)(({ theme }) => ({
 const CurrentDateLine = styled(Box)(({ theme, left }) => ({
   position: 'absolute',
   left: `calc(${left}% - 1px)`,
-  width: 2,
+  width: 3,
   height: '100%',
-  top: 0,
-  background: 'linear-gradient(180deg, #2DD4BF 0%, rgba(45, 212, 191, 0.2) 100%)',
-  zIndex: 2
+  top: -24,
+  background: 'linear-gradient(180deg, #4ade80 0%, rgba(74, 222, 128, 0.2) 100%)',
+  zIndex: 1,
+  '&::before': {
+    content: '"Today"',
+    position: 'absolute',
+    top: -28,
+    left: '50%',
+    transform: 'translateX(-50%)',
+    color: '#4ade80',
+    fontSize: '0.875rem',
+    fontWeight: 600,
+    whiteSpace: 'nowrap',
+    zIndex: 3
+  }
 }));
 
 export default function TimelineSection() {
@@ -326,6 +338,9 @@ export default function TimelineSection() {
       width: '100%',
       display: 'flex',
       flexDirection: 'column',
+      bgcolor: '#0F2942',
+      borderRadius: 2,
+      p: 0
     }}>
       <Box sx={{
         display: 'flex',
@@ -337,7 +352,7 @@ export default function TimelineSection() {
           variant="h6" 
           sx={{ 
             fontWeight: 600,
-            fontSize: '1rem',
+            fontSize: '1.5rem',
             color: '#fff',
           }}
         >
@@ -348,7 +363,7 @@ export default function TimelineSection() {
         flex: 1,
         width: '100%',
         bgcolor: '#0B1929',
-        borderRadius: 2,
+        borderRadius: 1,
         p: 2,
         position: 'relative',
         overflow: 'hidden'

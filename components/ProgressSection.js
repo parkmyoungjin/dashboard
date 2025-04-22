@@ -130,10 +130,10 @@ export default function ProgressSection() {
         maxWidth: '800px',
         margin: '0 auto',
         p: 2,
-        display: 'flex',
-        flexDirection: 'column',
         bgcolor: '#0F2942',
-        borderRadius: 1
+        borderRadius: 2,
+        display: 'flex',
+        flexDirection: 'column'
       }}>
         <Typography 
           variant="h6" 
@@ -151,7 +151,7 @@ export default function ProgressSection() {
         <Box sx={{ 
           height: 'calc(100% - 10px)',
           bgcolor: '#0B1929',
-          borderRadius: 2,
+          borderRadius: 1,
           p: '12px 16px',
           display: 'flex',
           alignItems: 'center',
@@ -171,10 +171,10 @@ export default function ProgressSection() {
         maxWidth: '800px',
         margin: '0 auto',
         p: 2,
-        display: 'flex',
-        flexDirection: 'column',
         bgcolor: '#0F2942',
-        borderRadius: 1
+        borderRadius: 2,
+        display: 'flex',
+        flexDirection: 'column'
       }}>
         <Typography 
           variant="h6" 
@@ -192,7 +192,7 @@ export default function ProgressSection() {
         <Box sx={{ 
           height: 'calc(100% - 10px)',
           bgcolor: '#0B1929',
-          borderRadius: 2,
+          borderRadius: 1,
           p: '12px 16px',
           display: 'flex',
           alignItems: 'center',
@@ -212,10 +212,10 @@ export default function ProgressSection() {
         maxWidth: '800px',
         margin: '0 auto',
         p: 2,
-        display: 'flex',
-        flexDirection: 'column',
         bgcolor: '#0F2942',
-        borderRadius: 1
+        borderRadius: 2,
+        display: 'flex',
+        flexDirection: 'column'
       }}>
         <Typography 
           variant="h6" 
@@ -233,7 +233,7 @@ export default function ProgressSection() {
         <Box sx={{ 
           height: 'calc(100% - 10px)',
           bgcolor: '#0B1929',
-          borderRadius: 2,
+          borderRadius: 1,
           p: '12px 16px',
           display: 'flex',
           alignItems: 'center',
@@ -254,9 +254,9 @@ export default function ProgressSection() {
       width: '100%',
       maxWidth: '800px',
       margin: '0 auto',
-      p: 2,
+      p: 1,
       bgcolor: '#0F2942',
-      borderRadius: 1,
+      borderRadius: 2,
       display: 'flex',
       flexDirection: 'column'
     }}>
@@ -264,9 +264,9 @@ export default function ProgressSection() {
         variant="h6" 
         sx={{ 
           fontWeight: 600,
-          fontSize: '1rem',
+          fontSize: '1.5rem',
           color: '#fff',
-          mb: 1.5
+          mb: 0.5
         }}
       >
         진행 중 과제
@@ -275,7 +275,7 @@ export default function ProgressSection() {
         height: 'calc(100% - 10px)',
         width: '100%',
         bgcolor: '#0B1929',
-        borderRadius: 2,
+        borderRadius: 1,
         p: 2,
         display: 'flex',
         flexDirection: 'column',
