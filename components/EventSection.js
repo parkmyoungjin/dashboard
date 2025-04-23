@@ -256,14 +256,14 @@ export default function EventSection() {
                     sx={{ 
                       height: '32px',
                       '& .MuiChip-label': { 
-                        fontSize: '1.3rem',
+                        fontSize: '1rem',
                         fontWeight: 600
                       } 
                     }}
                   />
                   <Typography sx={{
                     color: '#94a3b8',
-                    fontSize: '1.3rem',
+                    fontSize: '1rem',
                     flex: 1,
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',

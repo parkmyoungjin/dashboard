@@ -1,9 +1,12 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, IconButton, Link, Dialog, DialogContent } from '@mui/material';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import DescriptionIcon from '@mui/icons-material/Description';
 import ArchitectureIcon from '@mui/icons-material/Architecture';
 import DomainVerificationIcon from '@mui/icons-material/DomainVerification';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import LanguageIcon from '@mui/icons-material/Language';
+import { useState } from 'react';
 
 const ArrowIcon = () => (
   <Box sx={{ display: 'flex', alignItems: 'center', height: '56px' }}>
@@ -52,6 +55,16 @@ const StatusIcon = ({ icon: Icon, label, isActive }) => {
 };
 
 export default function CurrentStatusSection() {
+  const [openImageDialog, setOpenImageDialog] = useState(false);
+
+  const handleOpenImageDialog = () => {
+    setOpenImageDialog(true);
+  };
+
+  const handleCloseImageDialog = () => {
+    setOpenImageDialog(false);
+  };
+
   return (
     <Box sx={{ 
       height: '100%',
@@ -62,7 +75,8 @@ export default function CurrentStatusSection() {
       bgcolor: '#0F2942',
       borderRadius: 2,
       display: 'flex',
-      flexDirection: 'column'
+      flexDirection: 'column',
+      position: 'relative'
     }}>
       <Typography 
         variant="h6" 
@@ -75,6 +89,65 @@ export default function CurrentStatusSection() {
       >
         Global Hub 진행 단계
       </Typography>
+
+      {/* 링크 버튼 추가 */}
+      <Box sx={{ 
+        position: 'absolute', 
+        top: 16, 
+        right: 20, 
+        display: 'flex', 
+        gap: 1 
+      }}>
+        <IconButton
+          size="small"
+          onClick={handleOpenImageDialog}
+          sx={{ 
+            bgcolor: 'transparent', 
+            color: '#2DD4BF',
+            borderRadius: 3,
+            '&:hover': {
+              bgcolor: 'rgba(45, 212, 191, 0.2)',
+            }
+          }}
+        >
+          <Box sx={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            fontSize: '0.75rem',
+            gap: 0.5
+          }}>
+            <LocationOnIcon fontSize="small" />
+            <Typography variant="caption" sx={{ color: '#2DD4BF' }}>사업대상지</Typography>
+          </Box>
+        </IconButton>
+
+        <IconButton
+          size="small"
+          component={Link}
+          href="https://www.pnuh.or.kr/pnuh/hospital/pnuh-promise.do"
+          target="_blank"
+          rel="noopener noreferrer"
+          sx={{ 
+            bgcolor: 'transparent', 
+            color: '#2DD4BF',
+            borderRadius: 3,
+            '&:hover': {
+              bgcolor: 'rgba(45, 212, 191, 0.2)',
+            }
+          }}
+        >
+          <Box sx={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            fontSize: '0.75rem',
+            gap: 0.5
+          }}>
+            <LanguageIcon fontSize="small" />
+            <Typography variant="caption" sx={{ color: '#2DD4BF' }}>홈페이지</Typography>
+          </Box>
+        </IconButton>
+      </Box>
+
       <Box sx={{
         height: 'calc(100% - 10px)',
         width: '100%',
@@ -101,6 +174,21 @@ export default function CurrentStatusSection() {
           <StatusIcon icon={DomainVerificationIcon} label="완공" isActive={false} />
         </Box>
       </Box>
+
+      {/* 이미지 팝업 다이얼로그 */}
+      <Dialog
+        open={openImageDialog}
+        onClose={handleCloseImageDialog}
+        maxWidth="md"
+      >
+        <DialogContent sx={{ p: 1, backgroundColor: '#0F2942' }}>
+          <img 
+            src="/images/project site.png" 
+            alt="사업대상지" 
+            style={{ width: '100%', height: 'auto', display: 'block' }} 
+          />
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 } 
