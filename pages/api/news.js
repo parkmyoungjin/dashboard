@@ -9,7 +9,7 @@ export default async function handler(req, res) {
 
     const response = await axios.get('https://openapi.naver.com/v1/search/news.json', {
       params: {
-        query: '병원 의료 진료',
+        query: '대학병원 의료 진료',
         display: 5,
         sort: 'date',  // 최신순 정렬
         start: 1,

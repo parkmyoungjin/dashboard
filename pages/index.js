@@ -6,6 +6,8 @@ import CurrentStatusSection from '../components/CurrentStatusSection';
 import EventSection from '../components/EventSection';
 import NewsSection from '../components/NewsSection';
 import CalendarSection from '../components/CalendarSection';
+import TrendSection from '../components/TrendSection';
+import ToggleSwitch from '../components/ToggleSwitch';
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 
@@ -103,6 +105,7 @@ const PageTitle = styled(Typography)(({ theme }) => ({
 const TimeDisplay = dynamic(() => Promise.resolve(() => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [batteryLevel, setBatteryLevel] = useState(100);
+  const [isToggled, setIsToggled] = useState(false);
   
   useEffect(() => {
     const timer = setInterval(() => {
@@ -148,6 +151,10 @@ const TimeDisplay = dynamic(() => Promise.resolve(() => {
       gap: 4,
       color: '#ffffff'
     }}>
+      <ToggleSwitch
+        checked={isToggled}
+        onChange={(e) => setIsToggled(e.target.checked)}
+      />
       <Typography sx={{
         fontSize: '1.8rem',
         fontWeight: 700,
@@ -207,80 +214,107 @@ export default function Dashboard() {
 
   return (
     <DashboardContainer>
-      <Paper sx={{ 
-        p: 0.5,
-        mb: 1.5,
-        background: '#0c0e1d',
-        backdropFilter: 'blur(8px)',
-        borderRadius: 2,
-        border: 'none',
-      }}>
-        <Box sx={{ 
-          display: 'flex', 
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: 2,
-          pl: 3,
-          pr: 3
-        }}>
-          <Box sx={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 2
-          }}>
-            <Box 
-              component="img"
-              src="/images/logo.png"
-              alt="PNUH Logo"
-              sx={{ 
-                height: '96px',
-                width: 'auto',
-                opacity: 1
-              }}
-            />
-            <Typography 
-              variant="h5" 
-              sx={{ 
-                fontWeight: 600,
-                fontSize: { xs: '1.2rem', sm: '1.6rem' },
-                color: '#2DD4BF',
-                textShadow: '0 0 10px rgba(45, 212, 191, 0.3)'
-              }}
-            >
-              신사업추진 보드
-            </Typography>
-          </Box>
-          <TimeDisplay />
-        </Box>
-      </Paper>
-
       <Grid container spacing={3}>
-        <Grid item xs={12} md={4}>
-          <DashboardCard>
-            <ProgressSection />
+        {/* Left Side Content (Header + Sections) */}
+        <Grid item xs={12} md={8}>
+          {/* Header */}
+          <Paper sx={{ 
+            p: 0.5,
+            mb: 3,
+            background: '#0c0e1d',
+            backdropFilter: 'blur(8px)',
+            borderRadius: 2,
+            border: 'none',
+          }}>
+            <Box sx={{ 
+              display: 'flex', 
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: 2,
+              pl: 3,
+              pr: 3
+            }}>
+              <Box sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 2
+              }}>
+                <Box 
+                  component="img"
+                  src="/images/logo.png"
+                  alt="PNUH Logo"
+                  sx={{ 
+                    height: '96px',
+                    width: 'auto',
+                    opacity: 1
+                  }}
+                />
+                <Typography 
+                  variant="h5" 
+                  sx={{ 
+                    fontWeight: 600,
+                    fontSize: { xs: '1.2rem', sm: '1.6rem' },
+                    color: '#2DD4BF',
+                    textShadow: '0 0 10px rgba(45, 212, 191, 0.3)'
+                  }}
+                >
+                  신사업추진 보드
+                </Typography>
+              </Box>
+              <TimeDisplay />
+            </Box>
+          </Paper>
+
+          {/* Top Row - Left Side */}
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={6}>
+              <DashboardCard>
+                <ProgressSection data={progress} />
+              </DashboardCard>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <DashboardCard>
+                <CalendarSection />
+              </DashboardCard>
+            </Grid>
+          </Grid>
+          
+          {/* Middle Row */}
+          <Grid item xs={12} sx={{ mt: 3 }}>
+            <DashboardCard>
+              <TimelineSection />
+            </DashboardCard>
+          </Grid>
+          
+          {/* Bottom Row */}
+          <Grid container spacing={3} sx={{ mt: 3 }}>
+            <Grid item xs={12} md={6}>
+              <DashboardCard>
+                <EventSection />
+              </DashboardCard>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <DashboardCard>
+                <CurrentStatusSection />
+              </DashboardCard>
+            </Grid>
+          </Grid>
+        </Grid>
+        
+        {/* Right Column - Full Height from top to bottom */}
+        <Grid item xs={12} md={4} sx={{ display: 'flex' }}>
+          <DashboardCard sx={{ 
+            flexGrow: 1, 
+            display: 'flex', 
+            flexDirection: 'column', 
+            height: '100%' 
+          }}>
+            <TrendSection />
           </DashboardCard>
         </Grid>
-        <Grid item xs={12} md={4}>
-          <DashboardCard>
-            <CurrentStatusSection />
-          </DashboardCard>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <DashboardCard>
-            <CalendarSection />
-          </DashboardCard>
-        </Grid>
-        <Grid item xs={12}>
-          <DashboardCard>
-            <TimelineSection />
-          </DashboardCard>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <DashboardCard>
-            <EventSection />
-          </DashboardCard>
-        </Grid>
-        <Grid item xs={12} md={6}>
+        
+        {/* Hidden but kept in code */}
+        <Grid item xs={12} sx={{ display: 'none' }}>
           <DashboardCard>
             <NewsSection />
           </DashboardCard>
