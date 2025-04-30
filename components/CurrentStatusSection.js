@@ -183,7 +183,7 @@ export default function CurrentStatusSection() {
       >
         <DialogContent sx={{ p: 1, backgroundColor: '#0F2942' }}>
           <img 
-            src="/images/project site.png" 
+            src="/images/project site.jpg" 
             alt="사업대상지" 
             style={{ width: '100%', height: 'auto', display: 'block' }} 
           />
