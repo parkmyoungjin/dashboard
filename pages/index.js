@@ -258,7 +258,7 @@ export default function Dashboard() {
                     textShadow: '0 0 10px rgba(45, 212, 191, 0.3)'
                   }}
                 >
-                  신사업추진 보드
+                
                 </Typography>
               </Box>
               <TimeDisplay />
